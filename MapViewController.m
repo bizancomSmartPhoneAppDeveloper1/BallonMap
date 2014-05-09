@@ -57,7 +57,26 @@
     //デリゲート処理
     _mapview.delegate = self;
     
+    //ユーザーロケーションを追跡
     _mapview.showsUserLocation = YES;
+    
+    //ツールバー生成
+    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
+    
+    //reloadボタン作成
+    UIBarButtonItem *reloadbtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"reload.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(mapReload)];
+    
+    //投稿ボタンを作成
+    UIBarButtonItem *contributebtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"contribute.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(contribute)];
+    
+    //informationボタン
+    UIBarButtonItem *informationbtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"information.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(intoInformation)];
+    
+    //ツールバーへボタンアイテムを設置
+    toolBar.items = [NSArray arrayWithObjects:reloadbtn,contributebtn,informationbtn, nil];
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:toolBar];
     
     [_mapview addAnnotation:
      [[CustomAnnotation alloc]initWithLocationCoordinate:CLLocationCoordinate2DMake(35.685623, 139.763153)
@@ -208,4 +227,18 @@
     [dbClient putItem:puItemRequest];
 }
 
+#pragma mark -
+#pragma mark ツールバーのボタン処理
+- (void)mapReload{
+    
+}
+
+- (void)contribute{
+    
+}
+
+//informationページへ移動
+- (void)intoInformation{
+    [self performSegueWithIdentifier:@"informationView" sender:self];
+}
 @end
