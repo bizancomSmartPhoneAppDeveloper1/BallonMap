@@ -32,6 +32,8 @@
 		1893B0CF1920A56700E98725 /* information.png in Resources */ = {isa = PBXBuildFile; fileRef = 1893B0CE1920A56700E98725 /* information.png */; };
 		1893B1121921D3E600E98725 /* contribute.png in Resources */ = {isa = PBXBuildFile; fileRef = 1893B1111921D3E600E98725 /* contribute.png */; };
 		1893B1151921D58700E98725 /* NSDate+Escort.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893B1141921D58700E98725 /* NSDate+Escort.m */; };
+		1893B11819236D0500E98725 /* check_off.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1893B11619236D0500E98725 /* check_off.jpg */; };
+		1893B11919236D0500E98725 /* check_on.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1893B11719236D0500E98725 /* check_on.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		1893B1111921D3E600E98725 /* contribute.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contribute.png; sourceTree = "<group>"; };
 		1893B1131921D58700E98725 /* NSDate+Escort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Escort.h"; sourceTree = "<group>"; };
 		1893B1141921D58700E98725 /* NSDate+Escort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Escort.m"; sourceTree = "<group>"; };
+		1893B11619236D0500E98725 /* check_off.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = check_off.jpg; sourceTree = "<group>"; };
+		1893B11719236D0500E98725 /* check_on.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = check_on.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +201,8 @@
 		1893B0B0191CB07000E98725 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				1893B11619236D0500E98725 /* check_off.jpg */,
+				1893B11719236D0500E98725 /* check_on.jpg */,
 				1893B1111921D3E600E98725 /* contribute.png */,
 				1893B0CE1920A56700E98725 /* information.png */,
 				1893B0B9191CBD4200E98725 /* reload.png */,
@@ -285,9 +291,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1893B0B2191CB10B00E98725 /* ballon_unchosen.png in Resources */,
+				1893B11919236D0500E98725 /* check_on.jpg in Resources */,
 				1893B084191B3D8400E98725 /* Images.xcassets in Resources */,
 				1893B076191B3D8400E98725 /* InfoPlist.strings in Resources */,
 				1893B0CF1920A56700E98725 /* information.png in Resources */,
+				1893B11819236D0500E98725 /* check_off.jpg in Resources */,
 				1893B07F191B3D8400E98725 /* Main.storyboard in Resources */,
 				1893B0BA191CBD4200E98725 /* reload.png in Resources */,
 				1893B1121921D3E600E98725 /* contribute.png in Resources */,
