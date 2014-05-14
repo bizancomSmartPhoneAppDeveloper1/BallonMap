@@ -14,8 +14,7 @@
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, retain) NSString *annotationTitle;
 @property (nonatomic, retain) NSString *annotationSubtitle;
-- (id)initWithLocationCoordinate:(CLLocationCoordinate2D) coordinate
-                           title:(NSString *)annotationTitle subtitle:(NSString *)annotationannSubtitle;
+- (id)initWithLocationCoordinate:(CLLocationCoordinate2D)coordinate title:(NSString *)annotationTitle;
 - (NSString *)title;
 - (NSString *)subtitle;
 
