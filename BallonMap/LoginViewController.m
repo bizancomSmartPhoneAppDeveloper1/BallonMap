@@ -78,7 +78,6 @@
 -(void)viewDidAppear:(BOOL)animated{
     //チェックボックスがONだった場合保存されたusernameを書き込む
     if (_checkbox.selected) {
-        NSLog(@"username");
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         _username.text = [userDefaults objectForKey:@"username"];
     }

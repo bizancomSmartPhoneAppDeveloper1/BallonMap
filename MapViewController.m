@@ -8,11 +8,11 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @"AKIAJSLRM43M5TTQCWHQ"
-#define SECRET_KEY              @"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"
-#define TABLE_NAME              @"testTable"
-#define TABLE_HASH_KEY          @"id"
-#define TABLE_RANGE_KEY         @"date"
+#define ACCESS_KEY_ID           @""
+#define SECRET_KEY              @""
+#define TABLE_NAME              @""
+#define TABLE_HASH_KEY          @""
+#define TABLE_RANGE_KEY         @""
 
 @interface MapViewController ()
 {
@@ -35,7 +35,7 @@
     
     //コメント用のテキストフィールド生成
     _commentTextField =
-    [[UITextField alloc] initWithFrame:CGRectMake(20, 200, 280, 30)];
+    [[UITextField alloc] initWithFrame:CGRectMake(20, 20, 280, 30)];
     _commentTextField.delegate = self;
     _commentTextField.borderStyle = UITextBorderStyleRoundedRect;
     _commentTextField.returnKeyType = UIReturnKeySend;
@@ -54,17 +54,17 @@
         NSLog(@"Location services not available.");
     }
     
-    //ユーザートラッキング(ON/OFF)用ボタン作成
-    UIButton *userTrackingbtn = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [userTrackingbtn addTarget:self action:@selector(userTrackingButton:) forControlEvents:UIControlEventTouchDown];
-    userTrackingbtn.frame = CGRectMake(0, 20, 35, 35);
-    [self.view addSubview:userTrackingbtn];
-    
-    //デリゲート処理
+    //MapViewデリゲート処理
     _mapview.delegate = self;
     
     //ユーザーロケーションを追跡
     _mapview.showsUserLocation = YES;
+    
+    //地図の拡大縮小を禁止
+    _mapview.zoomEnabled = NO;
+    
+    //地図のスクロールを禁止
+    _mapview.scrollEnabled = NO;
     
     //ツールバー生成
     UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
@@ -90,6 +90,16 @@
     [self.view addSubview:toolBar];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    //ユーザーの現在地をフォローし縮尺を40倍に設定
+    [_mapview setUserTrackingMode:MKUserTrackingModeFollow];
+    MKCoordinateRegion region = _mapview.region;
+    region.span.longitudeDelta /= 40;
+    region.span.latitudeDelta /= 40;
+    [_mapview setRegion:region];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -107,7 +117,6 @@
           [newLocation coordinate].latitude,[newLocation coordinate].longitude);
     
     MKCoordinateRegion region = MKCoordinateRegionMake([newLocation coordinate], MKCoordinateSpanMake(1.75, 1.75));
-    [_mapview setCenterCoordinate:[newLocation coordinate]];
     [_mapview setRegion:region];
 }
 
@@ -146,18 +155,6 @@
 - (void) onPause {
     if (nil == _locationManager && [CLLocationManager locationServicesEnabled])
         [_locationManager stopUpdatingLocation]; //測位停止
-}
-
-#pragma mark ユーザートラッキングボタン処理
-- (void)userTrackingButton:(UIButton *)sender{
-    sender.selected = !sender.selected;
-    if (sender.selected) {
-        //ONに変わった場合の処理、ユーザー追跡Off
-        [_mapview setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-    } else {
-        //OFFに変わった場合の処理、ユーザー追跡ON
-        [_mapview setUserTrackingMode:MKUserTrackingModeNone];
-    }
 }
 
 #pragma mark AnnotationView処理
