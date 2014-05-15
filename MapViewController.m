@@ -387,7 +387,20 @@
                                    userInfo:nil
                                     repeats:NO];
 }
-
+//キャンセルボタン処理
+-(void)commentCancel{
+    
+    //テキストビューを削除
+    [_commentTextView removeFromSuperview];
+    
+    //送信ボタンを削除
+    [sendServeButton removeFromSuperview];
+    
+    //キャンセルボタンを削除
+    [commentCancelButton removeFromSuperview];
+    
+    
+}
 #pragma mark Informationページへ移動
 - (void)intoInformation{
     [self performSegueWithIdentifier:@"informationView" sender:self];
