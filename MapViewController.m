@@ -25,8 +25,8 @@
 @end
 
 @implementation MapViewController{
-    UIButton *button;
-    UIButton *button1;
+    UIButton *sendServeButton;
+    UIButton *commentCancelButton;
 }
 
 - (void)viewDidLoad
@@ -372,25 +372,25 @@
     //textviemにフォーカスを移している
     [textView becomeFirstResponder];
     //ボタン生成
-    button =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    sendServeButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
-    [button setTitle:@"送信" forState:UIControlStateNormal];
+    [sendServeButton setTitle:@"送信" forState:UIControlStateNormal];
     //フォントサイズを決めている
-    button.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    sendServeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    button.frame =CGRectMake(260, 220, 50, 40);
+    sendServeButton.frame =CGRectMake(260, 220, 50, 40);
     //ボタンを表示する
-    [self.view addSubview:button];
+    [self.view addSubview:sendServeButton];
     
-    button1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    commentCancelButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
-    [button1 setTitle:@"戻る" forState:UIControlStateNormal];
+    [commentCancelButton setTitle:@"戻る" forState:UIControlStateNormal];
     //フォントサイズを決めている
-    button1.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    button1.frame =CGRectMake(220, 220, 50, 40);
+    commentCancelButton.frame =CGRectMake(220, 220, 50, 40);
     //ボタンを表示する
-    [self.view addSubview:button1];
+    [self.view addSubview:commentCancelButton];
     
 }
 
@@ -411,12 +411,12 @@
     NSRange searchResult = [textView.text rangeOfString:@"送信"];
     if (searchResult.location != NSNotFound) {
         /* 1-1. 改行の文字が押された場合 = Doneが押された場合 */
-        textView.hidden =YES;
+        textView = nil;
         // 1-1-1. 改行文字を消す
         textView.text = [textView.text stringByReplacingOccurrencesOfString:@"n" withString:@""];
         //ボタンを隠す
-        button.hidden =YES;
-        button1.hidden =YES;
+        sendServeButton =nil;
+        commentCancelButton =nil;
         
         // 1-1-2. キーボードをしまう
         [textView resignFirstResponder];
