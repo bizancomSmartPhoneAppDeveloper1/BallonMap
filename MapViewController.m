@@ -350,6 +350,8 @@
     commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
     commentCancelButton.frame =CGRectMake(180, 220, 80, 40);
+    //タッチアクションとメソッドを設定
+    [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
     
@@ -387,7 +389,20 @@
                                    userInfo:nil
                                     repeats:NO];
 }
-
+//キャンセルボタン処理
+-(void)commentCancel{
+    
+    //テキストビューを削除
+    [_commentTextView removeFromSuperview];
+    
+    //送信ボタンを削除
+    [sendServeButton removeFromSuperview];
+    
+    //キャンセルボタンを削除
+    [commentCancelButton removeFromSuperview];
+    
+    
+}
 #pragma mark Informationページへ移動
 - (void)intoInformation{
     [self performSegueWithIdentifier:@"informationView" sender:self];
