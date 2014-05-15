@@ -405,6 +405,7 @@
     [_mapview removeAnnotation:[annotationData objectAtIndex:0]];
     [annotationData removeObjectAtIndex:0];
 }
+
 /* 1. TextView の文字が変更される度に処理をする */
 - (void) textViewDidChange: (UITextView*) textView {
     NSRange searchResult = [textView.text rangeOfString:@"送信"];
