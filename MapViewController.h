@@ -13,7 +13,7 @@
 #import <MapKit/MapKit.h>
 #import "CustomAnnotation.h"
 
-@interface MapViewController : UIViewController<UITextFieldDelegate,CLLocationManagerDelegate,MKMapViewDelegate>
+@interface MapViewController : UIViewController<UITextFieldDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapview;
 
