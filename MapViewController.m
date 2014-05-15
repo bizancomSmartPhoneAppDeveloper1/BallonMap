@@ -42,7 +42,6 @@
     _commentTextField.clearButtonMode = UITextFieldViewModeAlways;
     _commentTextField.placeholder = @"コメントを入力してください";
     _commentTextField.backgroundColor = [UIColor colorWithRed:0.82 green:0.93 blue:0.99 alpha:1.0];
-    
     [self.view addSubview:_commentTextField];
     
     // 位置情報サービスが利用できるかどうかをチェック
@@ -50,20 +49,18 @@
         _locationManager.delegate = self;
         // 測位開始
         [_locationManager startUpdatingLocation];
-    } else {
-        NSLog(@"Location services not available.");
     }
     
     //MapViewデリゲート処理
     _mapview.delegate = self;
     
-    //ユーザーロケーションを追跡
+    //ユーザーロケーションを表示
     _mapview.showsUserLocation = YES;
     
-    //地図の拡大縮小を禁止
+    //地図の拡大縮小操作を禁止
     _mapview.zoomEnabled = NO;
     
-    //地図のスクロールを禁止
+    //地図のスクロール操作を禁止
     _mapview.scrollEnabled = NO;
     
     //ツールバー生成
@@ -84,20 +81,11 @@
     //ツールバーへボタンアイテムを設置
     toolBar.items = [NSArray arrayWithObjects:reloadbtn,space,contributebtn,space,informationbtn, nil];
     
+    //ツールバーのバックグラウンドカラーを設定
     toolBar.backgroundColor = [UIColor colorWithRed:(229/255.0) green:(234/255.0) blue:(234/255.0) alpha:1.0f];
     
     //ビューへツールバーを配置
     [self.view addSubview:toolBar];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    //ユーザーの現在地をフォローし縮尺を40倍に設定
-    [_mapview setUserTrackingMode:MKUserTrackingModeFollow];
-    MKCoordinateRegion region = _mapview.region;
-    region.span.longitudeDelta /= 40;
-    region.span.latitudeDelta /= 40;
-    [_mapview setRegion:region];
 }
 
 - (void)didReceiveMemoryWarning
@@ -108,19 +96,28 @@
 
 #pragma mark -
 #pragma mark 位置情報処理
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    //ユーザーの現在地をフォローし縮尺を設定
+    [_mapview setUserTrackingMode:MKUserTrackingModeFollow];
+    [_mapview setCenterCoordinate:userLocation.location.coordinate];
+    MKCoordinateRegion theRegion = _mapview.region;
+    theRegion.span.longitudeDelta /= 4;
+    theRegion.span.latitudeDelta /= 4;
+    [_mapview setRegion:theRegion];
+}
+
 // 位置情報更新時
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
-    
     //緯度・経度を出力
     NSLog(@"didUpdateToLocation latitude=%f, longitude=%f",
           [newLocation coordinate].latitude,[newLocation coordinate].longitude);
     
-    MKCoordinateRegion region = MKCoordinateRegionMake([newLocation coordinate], MKCoordinateSpanMake(1.75, 1.75));
+    MKCoordinateRegion region = MKCoordinateRegionMake([newLocation coordinate], MKCoordinateSpanMake(1, 1));
     [_mapview setRegion:region];
 }
 
-// 測位失敗時や、5位置情報の利用をユーザーが「不許可」とした場合などに呼ばれる
+// 測位失敗時や、位置情報の利用をユーザーが「不許可」とした場合などに呼ばれる
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     //エラーコードにより処理分岐
     if (error) {
