@@ -24,7 +24,10 @@
 
 @end
 
-@implementation MapViewController
+@implementation MapViewController{
+    UIButton *button;
+    UIButton *button1;
+}
 
 - (void)viewDidLoad
 {
@@ -339,6 +342,56 @@
 #pragma mark コメント投稿処理
 - (void)contribute{
     
+    // UITextViewのインスタンス化
+    CGRect rect1 = CGRectMake(0, 20, 320, 240);//self.view.bounds;
+    UITextView *textView = [[UITextView alloc]initWithFrame:rect1];
+    
+    // テキストの編集を可不を選ぶ
+    textView.editable = YES;
+    
+    // テキストを左寄せにする
+    textView.textAlignment = NSTextAlignmentLeft;//新しい書き方
+    
+    // テキストのフォントを設定
+    textView.font = [UIFont fontWithName:@"Helvetica" size:14];
+    
+    // テキストの背景色を設定
+    textView.backgroundColor = [UIColor whiteColor];
+    //リターンキーの種類
+    textView.returnKeyType = UIReturnKeyDone;
+    //デリケート設定
+    textView.delegate = self;
+    // 枠線
+    textView.layer.borderWidth = 1;
+    //textView.layer.borderColor = [[UIColorblackColor] CGColor];
+    // 角丸
+    textView.layer.cornerRadius = 5;
+    
+    // UITextViewのインスタンスをビューに追加
+    [self.view addSubview:textView];
+    //textviemにフォーカスを移している
+    [textView becomeFirstResponder];
+    //ボタン生成
+    button =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    //タイトル文字を決めている
+    [button setTitle:@"送信" forState:UIControlStateNormal];
+    //フォントサイズを決めている
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    //ボタンの領域と縦横サイズ
+    button.frame =CGRectMake(260, 220, 50, 40);
+    //ボタンを表示する
+    [self.view addSubview:button];
+    
+    button1 =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    //タイトル文字を決めている
+    [button1 setTitle:@"戻る" forState:UIControlStateNormal];
+    //フォントサイズを決めている
+    button1.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    //ボタンの領域と縦横サイズ
+    button1.frame =CGRectMake(220, 220, 50, 40);
+    //ボタンを表示する
+    [self.view addSubview:button1];
+    
 }
 
 #pragma mark Informationページへ移動
@@ -351,5 +404,21 @@
 - (void)deleteAnnotation{
     [_mapview removeAnnotation:[annotationData objectAtIndex:0]];
     [annotationData removeObjectAtIndex:0];
+}
+/* 1. TextView の文字が変更される度に処理をする */
+- (void) textViewDidChange: (UITextView*) textView {
+    NSRange searchResult = [textView.text rangeOfString:@"送信"];
+    if (searchResult.location != NSNotFound) {
+        /* 1-1. 改行の文字が押された場合 = Doneが押された場合 */
+        textView.hidden =YES;
+        // 1-1-1. 改行文字を消す
+        textView.text = [textView.text stringByReplacingOccurrencesOfString:@"n" withString:@""];
+        //ボタンを隠す
+        button.hidden =YES;
+        button1.hidden =YES;
+        
+        // 1-1-2. キーボードをしまう
+        [textView resignFirstResponder];
+    }
 }
 @end

@@ -15,7 +15,7 @@
 #import "LKKeychain.h"
 #import "NSDate+Escort.h"
 
-@interface MapViewController : UIViewController<UITextFieldDelegate,CLLocationManagerDelegate,MKMapViewDelegate>
+@interface MapViewController : UIViewController<UITextFieldDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapview;
 
