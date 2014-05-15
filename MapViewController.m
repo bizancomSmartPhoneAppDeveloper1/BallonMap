@@ -350,6 +350,8 @@
     commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
     commentCancelButton.frame =CGRectMake(180, 195, 80, 40);
+    //タッチアクションとメソッドを設定
+    [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
     
