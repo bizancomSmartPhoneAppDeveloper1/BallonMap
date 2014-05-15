@@ -8,18 +8,19 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @"AKIAJSLRM43M5TTQCWHQ"
-#define SECRET_KEY              @"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"
-#define TABLE_NAME              @"testTable"
-#define TABLE_HASH_KEY          @"id"
-#define TABLE_RANGE_KEY         @"date"
+#define ACCESS_KEY_ID           @""
+#define SECRET_KEY              @""
+#define TABLE_NAME              @""
+#define TABLE_HASH_KEY          @""
+#define TABLE_RANGE_KEY         @""
 
 @interface MapViewController ()
 {
     //Annotation管理用配列
     NSMutableArray *annotationData;
 }
-@property (nonatomic, retain) UITextField *commentTextField;
+
+@property (nonatomic, retain) UITextView *commentTextView;
 @property (nonatomic, retain) CLLocationManager *locationManager;
 
 @end
@@ -35,17 +36,6 @@
     
     //Annotation管理用配列生成
     annotationData = [NSMutableArray array];
-    
-    //コメント用のテキストフィールド生成
-    _commentTextField =
-    [[UITextField alloc] initWithFrame:CGRectMake(20, 20, 280, 30)];
-    _commentTextField.delegate = self;
-    _commentTextField.borderStyle = UITextBorderStyleRoundedRect;
-    _commentTextField.returnKeyType = UIReturnKeySend;
-    _commentTextField.clearButtonMode = UITextFieldViewModeAlways;
-    _commentTextField.placeholder = @"コメントを入力してください";
-    _commentTextField.backgroundColor = [UIColor colorWithRed:0.82 green:0.93 blue:0.99 alpha:1.0];
-    [self.view addSubview:_commentTextField];
     
     // 位置情報サービスが利用できるかどうかをチェック
     if ([CLLocationManager locationServicesEnabled]) {
@@ -180,36 +170,6 @@
 }
 
 #pragma mark -
-#pragma mark テキストフィールドReturn押下時の処理
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
-    CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextField.text];
-    
-    //AWSDynamoDBのTableへコメントをUpload
-    [self commentSender:annotation];
-    
-    //Annnotation管理用配列へカスタムAnnotationインスタンスを追加
-    [annotationData addObject:annotation];
-    
-    //AnnotationViewの配列へ管理配列へ追加したオブジェクトを代入
-    [_mapview addAnnotation:annotation];
-    
-    //送信時にコメント文字列を消去
-    _commentTextField.text = nil;
-    
-    //Annotation削除用カウンター設定
-    [NSTimer scheduledTimerWithTimeInterval:300
-                                     target:self
-                                   selector:@selector(deleteAnnotation)
-                                   userInfo:nil
-                                    repeats:NO];
-    
-    //texrfieldのフォーカス解除
-    [textField resignFirstResponder];
-    return YES;
-}
-
-#pragma mark -
 #pragma mark サーバーへコメント送信処理
 - (void)commentSender:(CustomAnnotation *)annotation{
     //awsアクセスキー情報格納
@@ -228,7 +188,6 @@
     //現在のローカル時間を取得し文字列で格納
     NSString *dateStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:
                                                        [[NSTimeZone systemTimeZone] secondsFromGMT]]];
-    
     //ユーザー用のパスワードを取得
     NSString *paswword = [LKKeychain getPasswordWithAccount:_userName service:@"CommentMap"];
     
@@ -243,7 +202,7 @@
                             [[DynamoDBAttributeValue alloc] initWithS:paswword], @"num",
                             [[DynamoDBAttributeValue alloc] initWithS:latitudeStr], @"latitude",
                             [[DynamoDBAttributeValue alloc] initWithS:longitudeStr], @"longitude",
-                            [[DynamoDBAttributeValue alloc] initWithS:_commentTextField.text], @"comment",
+                            [[DynamoDBAttributeValue alloc] initWithS:_commentTextView.text], @"comment",
                             nil];
     
     //更新用テーブル名と更新用Itemを格納
@@ -344,33 +303,33 @@
     
     // UITextViewのインスタンス化
     CGRect rect1 = CGRectMake(0, 20, 320, 240);//self.view.bounds;
-    UITextView *textView = [[UITextView alloc]initWithFrame:rect1];
+    _commentTextView = [[UITextView alloc]initWithFrame:rect1];
     
     // テキストの編集を可不を選ぶ
-    textView.editable = YES;
+    _commentTextView.editable = YES;
     
     // テキストを左寄せにする
-    textView.textAlignment = NSTextAlignmentLeft;//新しい書き方
+    _commentTextView.textAlignment = NSTextAlignmentLeft;//新しい書き方
     
     // テキストのフォントを設定
-    textView.font = [UIFont fontWithName:@"Helvetica" size:14];
+    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:14];
     
     // テキストの背景色を設定
-    textView.backgroundColor = [UIColor whiteColor];
+    _commentTextView.backgroundColor = [UIColor whiteColor];
     //リターンキーの種類
-    textView.returnKeyType = UIReturnKeyDone;
+    _commentTextView.returnKeyType = UIReturnKeyDone;
     //デリケート設定
-    textView.delegate = self;
+    _commentTextView.delegate = self;
     // 枠線
-    textView.layer.borderWidth = 1;
+    _commentTextView.layer.borderWidth = 1;
     //textView.layer.borderColor = [[UIColorblackColor] CGColor];
     // 角丸
-    textView.layer.cornerRadius = 5;
+    _commentTextView.layer.cornerRadius = 5;
     
     // UITextViewのインスタンスをビューに追加
-    [self.view addSubview:textView];
+    [self.view addSubview:_commentTextView];
     //textviemにフォーカスを移している
-    [textView becomeFirstResponder];
+    [_commentTextView becomeFirstResponder];
     //ボタン生成
     sendServeButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
@@ -379,19 +338,54 @@
     sendServeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
     sendServeButton.frame =CGRectMake(260, 220, 50, 40);
+    //タッチアクションとメソッドを設定
+    [sendServeButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
     [self.view addSubview:sendServeButton];
     
     commentCancelButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
-    [commentCancelButton setTitle:@"戻る" forState:UIControlStateNormal];
+    [commentCancelButton setTitle:@"キャンセル" forState:UIControlStateNormal];
     //フォントサイズを決めている
     commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    commentCancelButton.frame =CGRectMake(220, 220, 50, 40);
+    commentCancelButton.frame =CGRectMake(180, 220, 80, 40);
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
     
+}
+
+- (void)sendServer{
+    //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
+    CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
+    
+    //AWSDynamoDBのTableへコメントをUpload
+    [self commentSender:annotation];
+    
+    //Annnotation管理用配列へカスタムAnnotationインスタンスを追加
+    [annotationData addObject:annotation];
+    
+    //AnnotationViewの配列へ管理配列へ追加したオブジェクトを代入
+    [_mapview addAnnotation:annotation];
+    
+    //送信時にコメント文字列を消去
+    _commentTextView.text = nil;
+    
+    //テキストビューを削除
+    [_commentTextView removeFromSuperview];
+    
+    //送信ボタンを削除
+    [sendServeButton removeFromSuperview];
+    
+    //キャンセルボタンを削除
+    [commentCancelButton removeFromSuperview];
+    
+    //Annotation削除用カウンター設定
+    [NSTimer scheduledTimerWithTimeInterval:300
+                                     target:self
+                                   selector:@selector(deleteAnnotation)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 
 #pragma mark Informationページへ移動
@@ -408,18 +402,6 @@
 
 /* 1. TextView の文字が変更される度に処理をする */
 - (void) textViewDidChange: (UITextView*) textView {
-    NSRange searchResult = [textView.text rangeOfString:@"送信"];
-    if (searchResult.location != NSNotFound) {
-        /* 1-1. 改行の文字が押された場合 = Doneが押された場合 */
-        textView = nil;
-        // 1-1-1. 改行文字を消す
-        textView.text = [textView.text stringByReplacingOccurrencesOfString:@"n" withString:@""];
-        //ボタンを隠す
-        sendServeButton =nil;
-        commentCancelButton =nil;
-        
-        // 1-1-2. キーボードをしまう
-        [textView resignFirstResponder];
-    }
+
 }
 @end
