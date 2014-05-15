@@ -337,7 +337,7 @@
     //フォントサイズを決めている
     sendServeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    sendServeButton.frame =CGRectMake(260, 220, 50, 40);
+    sendServeButton.frame =CGRectMake(260, 195, 50, 40);
     //タッチアクションとメソッドを設定
     [sendServeButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
@@ -349,7 +349,7 @@
     //フォントサイズを決めている
     commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    commentCancelButton.frame =CGRectMake(180, 220, 80, 40);
+    commentCancelButton.frame =CGRectMake(180, 195, 80, 40);
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
     
