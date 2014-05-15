@@ -405,4 +405,20 @@
     [_mapview removeAnnotation:[annotationData objectAtIndex:0]];
     [annotationData removeObjectAtIndex:0];
 }
+/* 1. TextView の文字が変更される度に処理をする */
+- (void) textViewDidChange: (UITextView*) textView {
+    NSRange searchResult = [textView.text rangeOfString:@"送信"];
+    if (searchResult.location != NSNotFound) {
+        /* 1-1. 改行の文字が押された場合 = Doneが押された場合 */
+        textView.hidden =YES;
+        // 1-1-1. 改行文字を消す
+        textView.text = [textView.text stringByReplacingOccurrencesOfString:@"n" withString:@""];
+        //ボタンを隠す
+        button.hidden =YES;
+        button1.hidden =YES;
+        
+        // 1-1-2. キーボードをしまう
+        [textView resignFirstResponder];
+    }
+}
 @end
