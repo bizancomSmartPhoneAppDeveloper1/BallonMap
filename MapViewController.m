@@ -8,11 +8,11 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @""
-#define SECRET_KEY              @""
-#define TABLE_NAME              @""
-#define TABLE_HASH_KEY          @""
-#define TABLE_RANGE_KEY         @""
+#define ACCESS_KEY_ID           @"AKIAJSLRM43M5TTQCWHQ"
+#define SECRET_KEY              @"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"
+#define TABLE_NAME              @"testTable"
+#define TABLE_HASH_KEY          @"id"
+#define TABLE_RANGE_KEY         @"date"
 
 @interface MapViewController ()
 {
@@ -28,6 +28,7 @@
 @implementation MapViewController{
     UIButton *sendServeButton;
     UIButton *commentCancelButton;
+    CGRect keyboardFrameSize;
 }
 
 - (void)viewDidLoad
@@ -300,9 +301,15 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-    
+    //通知を登録している
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //ステータスバー領域を含まない画面サイズ
+    CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
+    CGRect main = [[UIScreen mainScreen]bounds];
+    float statusbar = main.size.height - exceptStatus.size.height;
     // UITextViewのインスタンス化
-    CGRect rect1 = CGRectMake(0, 20, 320, 240);//self.view.bounds;
+    NSLog(@"%f",keyboardFrameSize.size.height);
+    CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
     
     // テキストの編集を可不を選ぶ
@@ -337,7 +344,7 @@
     //フォントサイズを決めている
     sendServeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    sendServeButton.frame =CGRectMake(260, 220, 50, 40);
+    sendServeButton.frame =CGRectMake(260, 195, 50, 40);
     //タッチアクションとメソッドを設定
     [sendServeButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
@@ -349,12 +356,11 @@
     //フォントサイズを決めている
     commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    commentCancelButton.frame =CGRectMake(180, 220, 80, 40);
+    commentCancelButton.frame =CGRectMake(180, 195, 80, 40);
     //タッチアクションとメソッドを設定
     [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
-    
 }
 
 - (void)sendServer{
@@ -417,6 +423,12 @@
 
 /* 1. TextView の文字が変更される度に処理をする */
 - (void) textViewDidChange: (UITextView*) textView {
+    
+}
 
+- (void)keyboardWillShow:(NSNotification*)note
+{
+    // キーボードの表示完了時の場所と大きさを取得します。
+    keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 }
 @end
