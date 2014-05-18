@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180993941928F10E003CDA49 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 180993931928F10E003CDA49 /* Reachability.m */; };
 		1893B06C191B3D8400E98725 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06B191B3D8400E98725 /* Foundation.framework */; };
 		1893B06E191B3D8400E98725 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06D191B3D8400E98725 /* CoreGraphics.framework */; };
 		1893B070191B3D8400E98725 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06F191B3D8400E98725 /* UIKit.framework */; };
@@ -47,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		180993921928F10E003CDA49 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		180993931928F10E003CDA49 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		1893B068191B3D8400E98725 /* BallonMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BallonMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1893B06B191B3D8400E98725 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1893B06D191B3D8400E98725 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -150,6 +153,8 @@
 				1893B0B0191CB07000E98725 /* resource */,
 				1893B0A6191B3EE100E98725 /* LKKeychain.h */,
 				1893B0A7191B3EE100E98725 /* LKKeychain.m */,
+				180993921928F10E003CDA49 /* Reachability.h */,
+				180993931928F10E003CDA49 /* Reachability.m */,
 				1893B1131921D58700E98725 /* NSDate+Escort.h */,
 				1893B1141921D58700E98725 /* NSDate+Escort.m */,
 				1893B07A191B3D8400E98725 /* AppDelegate.h */,
@@ -324,6 +329,7 @@
 				1893B1151921D58700E98725 /* NSDate+Escort.m in Sources */,
 				1893B0A8191B3EE100E98725 /* LKKeychain.m in Sources */,
 				1893B0C1191CBF4100E98725 /* InformationViewController.m in Sources */,
+				180993941928F10E003CDA49 /* Reachability.m in Sources */,
 				1893B0A2191B3E0C00E98725 /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
