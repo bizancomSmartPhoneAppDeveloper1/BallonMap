@@ -69,17 +69,18 @@
     [self.view addSubview:_checkbox];
     
     //ラベル生成
-    UILabel *announceLabel = [[UILabel alloc] initWithFrame:CGRectMake(30,146,150,14)];
+    UILabel *announceLabel = [[UILabel alloc] initWithFrame:CGRectMake(30,146,176,14)];
     announceLabel.font = [UIFont boldSystemFontOfSize:11];
-    announceLabel.text = @"ユーザーIDを保存する";
+    announceLabel.text = @"ユーザーIDとパスワードを保存する";
     [self.view addSubview:announceLabel];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    //チェックボックスがONだった場合保存されたusernameを書き込む
+    //チェックボックスがONだった場合保存されたusernameとパスワードを書き込む
     if (_checkbox.selected) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         _username.text = [userDefaults objectForKey:@"username"];
+        _password.text = [LKKeychain getPasswordWithAccount:_username.text service:@"CommentMap"];
     }
 }
 
@@ -250,6 +251,5 @@ shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)strin
         [userDefaults setObject:_username.text forKey:@"username"];
         [userDefaults synchronize];
     }
-    NSLog(@"button %d",_checkbox.selected);
 }
 @end
