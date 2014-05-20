@@ -372,7 +372,15 @@
 - (void)sendServer{
     //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
     CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
-    
+    if ([_commentTextView.text length] == 0) {
+        
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"コメントを入力してください" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
+        
+        [alert show];
+        
+    }else{
     //AWSDynamoDBのTableへコメントをUpload
     [self commentSender:annotation];
     
@@ -393,7 +401,7 @@
     
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
-    
+    }
     //Annotation削除用カウンター設定
     [NSTimer scheduledTimerWithTimeInterval:300
                                      target:self
