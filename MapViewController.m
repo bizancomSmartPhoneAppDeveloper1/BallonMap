@@ -101,10 +101,15 @@
     Reachability *reachablity = [Reachability reachabilityForInternetConnection];
     NetworkStatus status = [reachablity currentReachabilityStatus];
     if (status == NotReachable) {
-        NSLog(@"test");
         UIAlertView *networkAlert = [[UIAlertView alloc]initWithTitle:@"インターネット接続出来ません" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
         [networkAlert show];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    //キーボード表示の通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -121,6 +126,7 @@
     [_mapview setCenterCoordinate:userLocation.location.coordinate];
     MKCoordinateRegion theRegion = _mapview.region;
     theRegion.span.longitudeDelta /= 4;
+    NSLog(@"%f",theRegion.span.longitudeDelta);
     theRegion.span.latitudeDelta /= 4;
     [_mapview setRegion:theRegion];
 }
@@ -132,8 +138,7 @@
     NSLog(@"didUpdateToLocation latitude=%f, longitude=%f",
           [newLocation coordinate].latitude,[newLocation coordinate].longitude);
     
-    MKCoordinateRegion region = MKCoordinateRegionMake([newLocation coordinate], MKCoordinateSpanMake(1, 1));
-    [_mapview setRegion:region];
+    [_mapview setCenterCoordinate:newLocation.coordinate];
 }
 
 // 測位失敗時や、位置情報の利用をユーザーが「不許可」とした場合などに呼ばれる
@@ -307,8 +312,8 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-    //通知を登録している
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//    //通知を登録している
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //ステータスバー領域を含まない画面サイズ
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
