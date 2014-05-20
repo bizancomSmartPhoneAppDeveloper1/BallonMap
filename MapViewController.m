@@ -104,12 +104,9 @@
         UIAlertView *networkAlert = [[UIAlertView alloc]initWithTitle:@"インターネット接続出来ません" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
         [networkAlert show];
     }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    //キーボード表示の通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    //保存してあるデバイスのキーボードサイズを取得
+    keyboardFrameSize = CGRectFromString([[NSUserDefaults standardUserDefaults] objectForKey:@"keyboardSize"]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,7 +123,6 @@
     [_mapview setCenterCoordinate:userLocation.location.coordinate];
     MKCoordinateRegion theRegion = _mapview.region;
     theRegion.span.longitudeDelta /= 4;
-    NSLog(@"%f",theRegion.span.longitudeDelta);
     theRegion.span.latitudeDelta /= 4;
     [_mapview setRegion:theRegion];
 }
@@ -312,8 +308,6 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-    //    //通知を登録している
-    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //ステータスバー領域を含まない画面サイズ
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
@@ -322,7 +316,6 @@
     NSLog(@"%f",keyboardFrameSize.size.height);
     CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
-    
     
     // テキストの編集を可不を選ぶ
     _commentTextView.editable = YES;
@@ -436,13 +429,6 @@
 
 /* 1. TextView の文字が変更される度に処理をする */
 - (void) textViewDidChange: (UITextView*) textView {
-    
-}
-
-- (void)keyboardWillShow:(NSNotification*)note
-{
-    // キーボードの表示完了時の場所と大きさを取得します。
-    keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
 }
 @end

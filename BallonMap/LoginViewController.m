@@ -15,6 +15,7 @@
     UITableView *loginTableView;
     UIAlertView *createAccountAlert;
     UIAlertView *loginAlert;
+    CGRect keyboardFrameSize;
 }
 
 @property (retain, nonatomic) UITextField *username;
@@ -28,8 +29,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     //チェックボックスの状態を読み込む
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    _checkbox.selected = [userDefaults boolForKey:@"checkButton"];
+    _checkbox.selected = [[NSUserDefaults standardUserDefaults] boolForKey:@"checkButton"];
+    
+    //キーボードサイズ取得通知を登録
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -78,10 +81,15 @@
 -(void)viewDidAppear:(BOOL)animated{
     //チェックボックスがONだった場合保存されたusernameとパスワードを書き込む
     if (_checkbox.selected) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        _username.text = [userDefaults objectForKey:@"username"];
+        _username.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
         _password.text = [LKKeychain getPasswordWithAccount:_username.text service:@"CommentMap"];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    // キーボード表示時の通知を解除
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -253,5 +261,14 @@ shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)strin
         [userDefaults setObject:_username.text forKey:@"username"];
         [userDefaults synchronize];
     }
+}
+
+- (void)keyboardWillShow:(NSNotification*)note
+{
+    // キーボードの表示完了時の場所と大きさを取得します。
+    keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:NSStringFromCGRect(keyboardFrameSize) forKey:@"keyboardSize"];
+    [userDefaults synchronize];
 }
 @end
