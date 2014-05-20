@@ -8,8 +8,8 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @"AKIAIGTKU4OAJEQKJHDQ"
-#define SECRET_KEY              @"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"
+#define ACCESS_KEY_ID           @"AKIAJKFVBDZ3TX2ANIYQ"
+#define SECRET_KEY              @"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"
 #define TABLE_NAME              @"testTable"
 #define TABLE_HASH_KEY          @"id"
 #define TABLE_RANGE_KEY         @"date"
