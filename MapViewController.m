@@ -313,7 +313,6 @@
     CGRect main = [[UIScreen mainScreen]bounds];
     float statusbar = main.size.height - exceptStatus.size.height;
     // UITextViewのインスタンス化
-    NSLog(@"%f",keyboardFrameSize.size.height);
     CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
     
@@ -334,7 +333,6 @@
     _commentTextView.delegate = self;
     // 枠線
     _commentTextView.layer.borderWidth = 1;
-    //textView.layer.borderColor = [[UIColorblackColor] CGColor];
     // 角丸
     _commentTextView.layer.cornerRadius = 5;
     
