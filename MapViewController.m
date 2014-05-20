@@ -314,6 +314,7 @@
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
     float statusbar = main.size.height - exceptStatus.size.height;
+    
     // UITextViewのインスタンス化
     NSLog(@"%f",keyboardFrameSize.size.height);
     CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
@@ -326,7 +327,7 @@
     _commentTextView.textAlignment = NSTextAlignmentLeft;//新しい書き方
     
     // テキストのフォントを設定
-    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:14];
+    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:20];
     
     // テキストの背景色を設定
     _commentTextView.backgroundColor = [UIColor whiteColor];
@@ -409,6 +410,8 @@
                                    selector:@selector(deleteAnnotation)
                                    userInfo:nil
                                     repeats:NO];
+    
+    
 }
 //キャンセルボタン処理
 -(void)commentCancel{
@@ -446,4 +449,6 @@
     // キーボードの表示完了時の場所と大きさを取得します。
     keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 }
+
+
 @end
