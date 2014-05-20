@@ -313,6 +313,7 @@
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
     float statusbar = main.size.height - exceptStatus.size.height;
+    
     // UITextViewのインスタンス化
     NSLog(@"%f",keyboardFrameSize.size.height);
     CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
@@ -326,7 +327,7 @@
     _commentTextView.textAlignment = NSTextAlignmentLeft;//新しい書き方
     
     // テキストのフォントを設定
-    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:14];
+    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:20];
     
     // テキストの背景色を設定
     _commentTextView.backgroundColor = [UIColor whiteColor];
@@ -402,6 +403,8 @@
                                    selector:@selector(deleteAnnotation)
                                    userInfo:nil
                                     repeats:NO];
+    
+    
 }
 //キャンセルボタン処理
 -(void)commentCancel{
@@ -429,15 +432,34 @@
     [annotationData removeObjectAtIndex:0];
 }
 
-/* 1. TextView の文字が変更される度に処理をする */
-- (void) textViewDidChange: (UITextView*) textView {
-
-}
+///* 1. TextView の文字が変更される度に処理をする */
+//- (void) textViewDidChange: (UITextView*) textView {
+//
+//}
 
 - (void)keyboardWillShow:(NSNotification*)note
 {
     // キーボードの表示完了時の場所と大きさを取得します。
     keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
 }
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    //入力文字数の限界
+    int maxInputLength = 26;
+    
+    // 入力済みのテキストを取得
+    NSMutableString *str = [textView.text mutableCopy];
+    
+    // 入力済みのテキストと入力が行われたテキストを結合
+    [str replaceCharactersInRange:range withString:text];
+    
+    if ([str length] > maxInputLength) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+
 @end

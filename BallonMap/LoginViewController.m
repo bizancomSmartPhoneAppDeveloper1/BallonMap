@@ -163,14 +163,22 @@
 - (BOOL)textField:(UITextField *)textField
 shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     if (textField.tag == 1) {
-        return YES;
+//        return YES;
     }
     //チェックボックスON時にTextfieldに編集があった場合チェックをOFFに
     if (_checkbox.selected) {
         _checkbox.selected = NO;
     }
-    return YES;
-    NSLog(@"テスト");
+    
+    // すでに入力されているテキストを取得
+    NSMutableString *text = [textField.text mutableCopy];
+    
+    // すでに入力されているテキストに今回編集されたテキストをマージ
+    [text replaceCharactersInRange:range withString:string];
+    NSLog(@"1");
+    const int MAX_LENGTH =13;
+    // 結果が文字数をオーバーしていないならYES，オーバーしている場合はNO
+    return ([text length] <= MAX_LENGTH);
     
 }
 
