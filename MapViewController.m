@@ -90,7 +90,7 @@
     
     //awsアクセスキー情報格納
     aCredentials = [[AmazonCredentials alloc]
-                                       initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
+                    initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
     //ユーザー情報を元にDynamoDB用クライアント作成
     dbClient = [[AmazonDynamoDBClient alloc]initWithCredentials:aCredentials];
     
@@ -269,7 +269,7 @@
     
     //現在のローカル時間を取得し文字列で格納
     NSString *nowStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:
-                                                       [[NSTimeZone systemTimeZone] secondsFromGMT]]];
+                                                      [[NSTimeZone systemTimeZone] secondsFromGMT]]];
     
     //検索条件その2
     DynamoDBAttributeValue *date2 = [[DynamoDBAttributeValue alloc]initWithS:nowStr];
@@ -312,8 +312,8 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-//    //通知を登録している
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //    //通知を登録している
+    //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //ステータスバー領域を含まない画面サイズ
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
@@ -322,7 +322,7 @@
     NSLog(@"%f",keyboardFrameSize.size.height);
     CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
-
+    
     
     // テキストの編集を可不を選ぶ
     _commentTextView.editable = YES;
@@ -436,7 +436,7 @@
 
 /* 1. TextView の文字が変更される度に処理をする */
 - (void) textViewDidChange: (UITextView*) textView {
-
+    
 }
 
 - (void)keyboardWillShow:(NSNotification*)note
