@@ -170,6 +170,8 @@ shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)strin
         _checkbox.selected = NO;
     }
     return YES;
+    NSLog(@"テスト");
+    
 }
 
 #pragma mark -
