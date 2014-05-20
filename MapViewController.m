@@ -8,11 +8,15 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @"AKIAJSLRM43M5TTQCWHQ"
-#define SECRET_KEY              @"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"
+#define ACCESS_KEY_ID           @"AKIAIGTKU4OAJEQKJHDQ"
+#define SECRET_KEY              @"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"
 #define TABLE_NAME              @"testTable"
 #define TABLE_HASH_KEY          @"id"
 #define TABLE_RANGE_KEY         @"date"
+#define TABLE_COLUMN_NUM        @"num"
+#define TABLE_COLUMN_LATITUDE   @"latitude"
+#define TABLE_COLUMN_LONGITUDE  @"longitude"
+#define TABLE_COLUMN_COMMENT    @"comment"
 
 @interface MapViewController ()
 {
@@ -32,11 +36,7 @@
 
 @end
 
-@implementation MapViewController{
-    UIButton *sendServeButton;
-    UIButton *commentCancelButton;
-    CGRect keyboardFrameSize;
-}
+@implementation MapViewController
 
 - (void)viewDidLoad
 {
