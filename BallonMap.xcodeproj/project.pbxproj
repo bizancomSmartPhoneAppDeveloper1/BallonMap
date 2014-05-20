@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		180993941928F10E003CDA49 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 180993931928F10E003CDA49 /* Reachability.m */; };
+		180993961929D375003CDA49 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180993951929D375003CDA49 /* CoreLocation.framework */; };
+		180993981929D37C003CDA49 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180993971929D37C003CDA49 /* MapKit.framework */; };
+		1809939E192AF641003CDA49 /* ballon_unchosen.png in Resources */ = {isa = PBXBuildFile; fileRef = 1809939D192AF641003CDA49 /* ballon_unchosen.png */; };
 		1893B06C191B3D8400E98725 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06B191B3D8400E98725 /* Foundation.framework */; };
 		1893B06E191B3D8400E98725 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06D191B3D8400E98725 /* CoreGraphics.framework */; };
 		1893B070191B3D8400E98725 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06F191B3D8400E98725 /* UIKit.framework */; };
@@ -26,7 +30,6 @@
 		1893B0AB191B403700E98725 /* CustomAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893B0AA191B403700E98725 /* CustomAnnotation.m */; };
 		1893B0AD191B408600E98725 /* AWSDynamoDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B0AC191B408600E98725 /* AWSDynamoDB.framework */; };
 		1893B0AF191B409800E98725 /* AWSRuntime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B0AE191B409800E98725 /* AWSRuntime.framework */; };
-		1893B0B2191CB10B00E98725 /* ballon_unchosen.png in Resources */ = {isa = PBXBuildFile; fileRef = 1893B0B1191CB10B00E98725 /* ballon_unchosen.png */; };
 		1893B0BA191CBD4200E98725 /* reload.png in Resources */ = {isa = PBXBuildFile; fileRef = 1893B0B9191CBD4200E98725 /* reload.png */; };
 		1893B0C1191CBF4100E98725 /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893B0C0191CBF4100E98725 /* InformationViewController.m */; };
 		1893B0CF1920A56700E98725 /* information.png in Resources */ = {isa = PBXBuildFile; fileRef = 1893B0CE1920A56700E98725 /* information.png */; };
@@ -47,6 +50,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		180993921928F10E003CDA49 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		180993931928F10E003CDA49 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		180993951929D375003CDA49 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		180993971929D37C003CDA49 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		1809939D192AF641003CDA49 /* ballon_unchosen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ballon_unchosen.png; sourceTree = "<group>"; };
 		1893B068191B3D8400E98725 /* BallonMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BallonMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1893B06B191B3D8400E98725 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1893B06D191B3D8400E98725 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -74,7 +82,6 @@
 		1893B0AA191B403700E98725 /* CustomAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAnnotation.m; sourceTree = "<group>"; };
 		1893B0AC191B408600E98725 /* AWSDynamoDB.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSDynamoDB.framework; sourceTree = "<group>"; };
 		1893B0AE191B409800E98725 /* AWSRuntime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AWSRuntime.framework; sourceTree = "<group>"; };
-		1893B0B1191CB10B00E98725 /* ballon_unchosen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ballon_unchosen.png; sourceTree = "<group>"; };
 		1893B0B9191CBD4200E98725 /* reload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reload.png; sourceTree = "<group>"; };
 		1893B0BF191CBF4100E98725 /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InformationViewController.h; path = ../InformationViewController.h; sourceTree = "<group>"; };
 		1893B0C0191CBF4100E98725 /* InformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InformationViewController.m; path = ../InformationViewController.m; sourceTree = "<group>"; };
@@ -91,6 +98,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				180993981929D37C003CDA49 /* MapKit.framework in Frameworks */,
+				180993961929D375003CDA49 /* CoreLocation.framework in Frameworks */,
 				1893B06E191B3D8400E98725 /* CoreGraphics.framework in Frameworks */,
 				1893B070191B3D8400E98725 /* UIKit.framework in Frameworks */,
 				1893B0AD191B408600E98725 /* AWSDynamoDB.framework in Frameworks */,
@@ -134,6 +143,8 @@
 		1893B06A191B3D8400E98725 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				180993971929D37C003CDA49 /* MapKit.framework */,
+				180993951929D375003CDA49 /* CoreLocation.framework */,
 				1893B0AE191B409800E98725 /* AWSRuntime.framework */,
 				1893B0AC191B408600E98725 /* AWSDynamoDB.framework */,
 				1893B06B191B3D8400E98725 /* Foundation.framework */,
@@ -150,6 +161,8 @@
 				1893B0B0191CB07000E98725 /* resource */,
 				1893B0A6191B3EE100E98725 /* LKKeychain.h */,
 				1893B0A7191B3EE100E98725 /* LKKeychain.m */,
+				180993921928F10E003CDA49 /* Reachability.h */,
+				180993931928F10E003CDA49 /* Reachability.m */,
 				1893B1131921D58700E98725 /* NSDate+Escort.h */,
 				1893B1141921D58700E98725 /* NSDate+Escort.m */,
 				1893B07A191B3D8400E98725 /* AppDelegate.h */,
@@ -206,7 +219,7 @@
 				1893B1111921D3E600E98725 /* contribute.png */,
 				1893B0CE1920A56700E98725 /* information.png */,
 				1893B0B9191CBD4200E98725 /* reload.png */,
-				1893B0B1191CB10B00E98725 /* ballon_unchosen.png */,
+				1809939D192AF641003CDA49 /* ballon_unchosen.png */,
 			);
 			name = resource;
 			sourceTree = "<group>";
@@ -290,13 +303,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1893B0B2191CB10B00E98725 /* ballon_unchosen.png in Resources */,
 				1893B11919236D0500E98725 /* check_on.jpg in Resources */,
 				1893B084191B3D8400E98725 /* Images.xcassets in Resources */,
 				1893B076191B3D8400E98725 /* InfoPlist.strings in Resources */,
 				1893B0CF1920A56700E98725 /* information.png in Resources */,
 				1893B11819236D0500E98725 /* check_off.jpg in Resources */,
 				1893B07F191B3D8400E98725 /* Main.storyboard in Resources */,
+				1809939E192AF641003CDA49 /* ballon_unchosen.png in Resources */,
 				1893B0BA191CBD4200E98725 /* reload.png in Resources */,
 				1893B1121921D3E600E98725 /* contribute.png in Resources */,
 			);
@@ -324,6 +337,7 @@
 				1893B1151921D58700E98725 /* NSDate+Escort.m in Sources */,
 				1893B0A8191B3EE100E98725 /* LKKeychain.m in Sources */,
 				1893B0C1191CBF4100E98725 /* InformationViewController.m in Sources */,
+				180993941928F10E003CDA49 /* Reachability.m in Sources */,
 				1893B0A2191B3E0C00E98725 /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,6 +464,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -457,7 +472,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BallonMap/BallonMap-Prefix.pch";
 				INFOPLIST_FILE = "BallonMap/BallonMap-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -468,6 +486,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -475,7 +494,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BallonMap/BallonMap-Prefix.pch";
 				INFOPLIST_FILE = "BallonMap/BallonMap-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

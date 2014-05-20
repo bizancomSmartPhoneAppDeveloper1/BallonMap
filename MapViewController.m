@@ -16,8 +16,15 @@
 
 @interface MapViewController ()
 {
+    UIButton *sendServeButton;
+    UIButton *commentCancelButton;
+    CGRect keyboardFrameSize;
     //Annotation管理用配列
     NSMutableArray *annotationData;
+    //awsユーザー情報
+    AmazonCredentials *aCredentials;
+    //DynamoDBクライアント
+    AmazonDynamoDBClient *dbClient;
 }
 
 @property (nonatomic, retain) UITextView *commentTextView;
@@ -80,6 +87,26 @@
     
     //ビューへツールバーを配置
     [self.view addSubview:toolBar];
+    
+    //awsアクセスキー情報格納
+    aCredentials = [[AmazonCredentials alloc]
+                    initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
+    //ユーザー情報を元にDynamoDB用クライアント作成
+    dbClient = [[AmazonDynamoDBClient alloc]initWithCredentials:aCredentials];
+    
+    //DynamoDB用クライアントへエンドポイント(東京サーバー)設定
+    dbClient.endpoint = [AmazonEndpoints ddbEndpoint:AP_NORTHEAST_1];
+    
+    //インターネットが接続出来る環境でなければアラートを表示
+    Reachability *reachablity = [Reachability reachabilityForInternetConnection];
+    NetworkStatus status = [reachablity currentReachabilityStatus];
+    if (status == NotReachable) {
+        UIAlertView *networkAlert = [[UIAlertView alloc]initWithTitle:@"インターネット接続出来ません" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
+        [networkAlert show];
+    }
+    
+    //保存してあるデバイスのキーボードサイズを取得
+    keyboardFrameSize = CGRectFromString([[NSUserDefaults standardUserDefaults] objectForKey:@"keyboardSize"]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,8 +134,7 @@
     NSLog(@"didUpdateToLocation latitude=%f, longitude=%f",
           [newLocation coordinate].latitude,[newLocation coordinate].longitude);
     
-    MKCoordinateRegion region = MKCoordinateRegionMake([newLocation coordinate], MKCoordinateSpanMake(1, 1));
-    [_mapview setRegion:region];
+    [_mapview setCenterCoordinate:newLocation.coordinate];
 }
 
 // 測位失敗時や、位置情報の利用をユーザーが「不許可」とした場合などに呼ばれる
@@ -173,15 +199,6 @@
 #pragma mark -
 #pragma mark サーバーへコメント送信処理
 - (void)commentSender:(CustomAnnotation *)annotation{
-    //awsアクセスキー情報格納
-    AmazonCredentials *aCredentials = [[AmazonCredentials alloc]
-                                       initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
-    //ユーザー情報を元にDynamoDB用クライアント作成
-    AmazonDynamoDBClient *dbClient = [[AmazonDynamoDBClient alloc]initWithCredentials:aCredentials];
-    
-    //DynamoDB用クライアントへエンドポイント(東京サーバー)設定
-    dbClient.endpoint = [AmazonEndpoints ddbEndpoint:AP_NORTHEAST_1];
-    
     //日付フォーマットを指定
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     dateFormatter.dateFormat  = @"yyyy/MM/dd HH:mm:ss";
@@ -200,10 +217,10 @@
     (NSMutableDictionary *)[NSDictionary dictionaryWithObjectsAndKeys:
                             [[DynamoDBAttributeValue alloc] initWithS:_userName], TABLE_HASH_KEY,
                             [[DynamoDBAttributeValue alloc] initWithS:dateStr], TABLE_RANGE_KEY,
-                            [[DynamoDBAttributeValue alloc] initWithS:paswword], @"num",
-                            [[DynamoDBAttributeValue alloc] initWithS:latitudeStr], @"latitude",
-                            [[DynamoDBAttributeValue alloc] initWithS:longitudeStr], @"longitude",
-                            [[DynamoDBAttributeValue alloc] initWithS:_commentTextView.text], @"comment",
+                            [[DynamoDBAttributeValue alloc] initWithS:paswword], TABLE_COLUMN_NUM,
+                            [[DynamoDBAttributeValue alloc] initWithS:latitudeStr], TABLE_COLUMN_LATITUDE,
+                            [[DynamoDBAttributeValue alloc] initWithS:longitudeStr], TABLE_COLUMN_LONGITUDE,
+                            [[DynamoDBAttributeValue alloc] initWithS:_commentTextView.text], TABLE_COLUMN_COMMENT,
                             nil];
     
     //更新用テーブル名と更新用Itemを格納
@@ -217,16 +234,6 @@
 #pragma mark ツールバーのボタン処理
 #pragma mark AnnotaionReload
 - (void)mapReload{
-    //awsアクセスキー情報格納
-    AmazonCredentials *aCredentials = [[AmazonCredentials alloc]
-                                       initWithAccessKey:ACCESS_KEY_ID
-                                       withSecretKey:SECRET_KEY];
-    //ユーザー情報を元にDynamoDB用クライアント作成
-    AmazonDynamoDBClient *dbClient = [[AmazonDynamoDBClient alloc]initWithCredentials:aCredentials];
-    
-    //DynamoDB用クライアントへエンドポイント(東京サーバー)設定
-    dbClient.endpoint = [AmazonEndpoints ddbEndpoint:AP_NORTHEAST_1];
-    
     //DynamoDBスキャンリクエスト用オブジェクトを生成
     DynamoDBScanRequest *scanRequest = [DynamoDBScanRequest new];
     
@@ -258,7 +265,7 @@
     
     //現在のローカル時間を取得し文字列で格納
     NSString *nowStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:
-                                                       [[NSTimeZone systemTimeZone] secondsFromGMT]]];
+                                                      [[NSTimeZone systemTimeZone] secondsFromGMT]]];
     
     //検索条件その2
     DynamoDBAttributeValue *date2 = [[DynamoDBAttributeValue alloc]initWithS:nowStr];
@@ -274,11 +281,11 @@
     
     //取得したレスポンスから必要な要素をCustomAnnotaionのインスタンスへ格納し、それらをAnnotation管理用配列へ追加(全要素分)
     for (NSMutableArray *elements in response.items) {
-        DynamoDBAttributeValue *comment = [elements valueForKey:@"comment"];
+        DynamoDBAttributeValue *comment = [elements valueForKey:TABLE_COLUMN_COMMENT];
         NSString *commentStr = comment.s;
-        DynamoDBAttributeValue *latitude = [elements valueForKey:@"latitude"];
+        DynamoDBAttributeValue *latitude = [elements valueForKey:TABLE_COLUMN_LATITUDE];
         NSString *latitudeStr = latitude.s;
-        DynamoDBAttributeValue *longitude = [elements valueForKey:@"longitude"];
+        DynamoDBAttributeValue *longitude = [elements valueForKey:TABLE_COLUMN_LONGITUDE];
         NSString *longitudeStr = longitude.s;
         CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake([latitudeStr doubleValue], [longitudeStr doubleValue]);
         CustomAnnotation *annotations = [[CustomAnnotation alloc]
@@ -366,7 +373,15 @@
 - (void)sendServer{
     //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
     CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
-    
+    if ([_commentTextView.text length] == 0) {
+        
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"コメントを入力してください" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
+        
+        [alert show];
+        
+    }else{
     //AWSDynamoDBのTableへコメントをUpload
     [self commentSender:annotation];
     
@@ -387,7 +402,7 @@
     
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
-    
+    }
     //Annotation削除用カウンター設定
     [NSTimer scheduledTimerWithTimeInterval:300
                                      target:self
