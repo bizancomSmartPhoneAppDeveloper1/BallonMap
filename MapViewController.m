@@ -308,10 +308,13 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
+    //通知を登録している
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //ステータスバー領域を含まない画面サイズ
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
     float statusbar = main.size.height - exceptStatus.size.height;
+    
     // UITextViewのインスタンス化
     CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
@@ -323,7 +326,7 @@
     _commentTextView.textAlignment = NSTextAlignmentLeft;//新しい書き方
     
     // テキストのフォントを設定
-    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:14];
+    _commentTextView.font = [UIFont fontWithName:@"Helvetica" size:20];
     
     // テキストの背景色を設定
     _commentTextView.backgroundColor = [UIColor whiteColor];
@@ -364,13 +367,20 @@
     [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
-    
 }
 
 - (void)sendServer{
     //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
     CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
-    
+    if ([_commentTextView.text length] == 0) {
+        
+        
+        
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"コメントを入力してください" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
+        
+        [alert show];
+        
+    }else{
     //AWSDynamoDBのTableへコメントをUpload
     [self commentSender:annotation];
     
@@ -391,13 +401,15 @@
     
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
-    
+    }
     //Annotation削除用カウンター設定
     [NSTimer scheduledTimerWithTimeInterval:300
                                      target:self
                                    selector:@selector(deleteAnnotation)
                                    userInfo:nil
                                     repeats:NO];
+    
+    
 }
 //キャンセルボタン処理
 -(void)commentCancel{
@@ -429,4 +441,12 @@
 - (void) textViewDidChange: (UITextView*) textView {
     
 }
+
+- (void)keyboardWillShow:(NSNotification*)note
+{
+    // キーボードの表示完了時の場所と大きさを取得します。
+    keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+}
+
+
 @end
