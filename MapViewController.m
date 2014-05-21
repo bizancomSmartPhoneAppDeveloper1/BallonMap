@@ -8,8 +8,8 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @"AKIAJKFVBDZ3TX2ANIYQ"
-#define SECRET_KEY              @"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"
+#define ACCESS_KEY_ID           @""
+#define SECRET_KEY              @""
 #define TABLE_NAME              @"testTable"
 #define TABLE_HASH_KEY          @"id"
 #define TABLE_RANGE_KEY         @"date"
@@ -308,8 +308,6 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-    //通知を登録している
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //ステータスバー領域を含まない画面サイズ
     CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
     CGRect main = [[UIScreen mainScreen]bounds];
@@ -370,8 +368,6 @@
 }
 
 - (void)sendServer{
-    //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
-    CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
     if ([_commentTextView.text length] == 0) {
         
         
@@ -381,6 +377,8 @@
         [alert show];
         
     }else{
+    //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
+    CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
     //AWSDynamoDBのTableへコメントをUpload
     [self commentSender:annotation];
     
@@ -401,15 +399,13 @@
     
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
-    }
     //Annotation削除用カウンター設定
     [NSTimer scheduledTimerWithTimeInterval:300
-                                     target:self
-                                   selector:@selector(deleteAnnotation)
-                                   userInfo:nil
+                                    target:self
+                                    selector:@selector(deleteAnnotation)
+                                    userInfo:nil
                                     repeats:NO];
-    
-    
+    }
 }
 //キャンセルボタン処理
 -(void)commentCancel{
@@ -436,17 +432,5 @@
     [_mapview removeAnnotation:[annotationData objectAtIndex:0]];
     [annotationData removeObjectAtIndex:0];
 }
-
-/* 1. TextView の文字が変更される度に処理をする */
-- (void) textViewDidChange: (UITextView*) textView {
-    
-}
-
-- (void)keyboardWillShow:(NSNotification*)note
-{
-    // キーボードの表示完了時の場所と大きさを取得します。
-    keyboardFrameSize = [[note.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-}
-
 
 @end
