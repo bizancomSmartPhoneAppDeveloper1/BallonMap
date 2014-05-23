@@ -8,8 +8,8 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @""
-#define SECRET_KEY              @""
+#define ACCESS_KEY_ID           @"AKIAIRE6TLCKAYJBDMKA"
+#define SECRET_KEY              @"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"
 #define TABLE_NAME              @"testTable"
 #define TABLE_HASH_KEY          @"id"
 #define TABLE_RANGE_KEY         @"date"
@@ -22,6 +22,8 @@
 {
     UIButton *sendServeButton;
     UIButton *commentCancelButton;
+    UIView *commentbackView;
+    UIButton *reloadbtn;
     CGRect keyboardFrameSize;
     //Annotation管理用配列
     NSMutableArray *annotationData;
@@ -68,7 +70,15 @@
     UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
     
     //reloadボタン作成
-    UIBarButtonItem *reloadbtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"reload.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(mapReload)];
+    reloadbtn = [[UIButton alloc]
+                      initWithFrame:CGRectMake(0, 0, 50, 40)];
+    [reloadbtn setBackgroundImage:[UIImage imageNamed:@"reload.png"] forState:UIControlStateNormal];
+    [reloadbtn addTarget:self
+            action:@selector(mapReload) forControlEvents:UIControlEventTouchUpInside];
+    
+    //ボタンを元にボタンアイテムを作成
+    UIBarButtonItem *mapReloadBtn =
+    [[UIBarButtonItem alloc] initWithCustomView:reloadbtn];
     
     //投稿ボタンを作成
     UIBarButtonItem *contributebtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"contribute.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(contribute)];
@@ -80,7 +90,7 @@
     UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     //ツールバーへボタンアイテムを設置
-    toolBar.items = [NSArray arrayWithObjects:reloadbtn,space,contributebtn,space,informationbtn, nil];
+    toolBar.items = [NSArray arrayWithObjects:mapReloadBtn,space,contributebtn,space,informationbtn, nil];
     
     //ツールバーのバックグラウンドカラーを設定
     toolBar.backgroundColor = [UIColor colorWithRed:(229/255.0) green:(234/255.0) blue:(234/255.0) alpha:1.0f];
@@ -234,6 +244,25 @@
 #pragma mark ツールバーのボタン処理
 #pragma mark AnnotaionReload
 - (void)mapReload{
+    // アニメーションの初期化　アニメーションのキーパスを"transform"にする
+    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"transform"];
+    
+    // 回転の開始と終わりの角度を設定　単位はラジアン
+    anim.fromValue = [NSNumber numberWithDouble:0];
+    anim.toValue = [NSNumber numberWithDouble:2 * M_PI];
+    
+    // 回転軸の設定
+    anim.valueFunction = [CAValueFunction functionWithName:kCAValueFunctionRotateZ];
+    
+    //１回転あたりのアニメーション時間　単位は秒
+    anim.duration = 1;
+    
+    // アニメーションのリピート回数
+    anim.repeatCount = 1;
+    
+    // アニメーションをレイヤーにセット
+    [reloadbtn.layer addAnimation:anim forKey:nil];
+    
     //DynamoDBスキャンリクエスト用オブジェクトを生成
     DynamoDBScanRequest *scanRequest = [DynamoDBScanRequest new];
     
@@ -308,13 +337,14 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-    //ステータスバー領域を含まない画面サイズ
-    CGRect exceptStatus =[[UIScreen mainScreen]applicationFrame];
-    CGRect main = [[UIScreen mainScreen]bounds];
-    float statusbar = main.size.height - exceptStatus.size.height;
+    //TextViewの背景Viewを差し込み
+    commentbackView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height)];
+    commentbackView.backgroundColor = [UIColor whiteColor];
+    
+    [self.view addSubview:commentbackView];
     
     // UITextViewのインスタンス化
-    CGRect rect1 = CGRectMake(0,exceptStatus.origin.y, self.view.bounds.size.width, (self.view.bounds.size.height-keyboardFrameSize.size.height) - statusbar);
+    CGRect rect1 = CGRectMake(0, 65, self.view.bounds.size.width, (self.view.bounds.size.height - keyboardFrameSize.size.height) - 65);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
     
     // テキストの編集を可不を選ぶ
@@ -339,6 +369,7 @@
     
     // UITextViewのインスタンスをビューに追加
     [self.view addSubview:_commentTextView];
+    
     //textviemにフォーカスを移している
     [_commentTextView becomeFirstResponder];
     //ボタン生成
@@ -348,7 +379,7 @@
     //フォントサイズを決めている
     sendServeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    sendServeButton.frame =CGRectMake(260, 195, 50, 40);
+    sendServeButton.frame =CGRectMake(self.view.bounds.size.width - 60, keyboardFrameSize.origin.y - 160, 50, 40);
     //タッチアクションとメソッドを設定
     [sendServeButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
@@ -360,54 +391,34 @@
     //フォントサイズを決めている
     commentCancelButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    commentCancelButton.frame =CGRectMake(180, 195, 80, 40);
+    commentCancelButton.frame =CGRectMake(10, keyboardFrameSize.origin.y - 160, 80, 40);
     //タッチアクションとメソッドを設定
     [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
+    
     //ボタンを表示する
     [self.view addSubview:commentCancelButton];
 }
 
-- (void)sendServer{
-    if ([_commentTextView.text length] == 0) {
-        
-        
-        
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"コメントを入力してください" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
-        
-        [alert show];
-        
-    }else{
-    //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
-    CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
-    //AWSDynamoDBのTableへコメントをUpload
-    [self commentSender:annotation];
+#pragma mark コメント投稿時の文字数制限
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    //入力文字数の限界
+    int maxInputLength = 26;
     
-    //Annnotation管理用配列へカスタムAnnotationインスタンスを追加
-    [annotationData addObject:annotation];
+    // 入力済みのテキストを取得
+    NSMutableString *str = [textView.text mutableCopy];
     
-    //AnnotationViewの配列へ管理配列へ追加したオブジェクトを代入
-    [_mapview addAnnotation:annotation];
+    // 入力済みのテキストと入力が行われたテキストを結合
+    [str replaceCharactersInRange:range withString:text];
     
-    //送信時にコメント文字列を消去
-    _commentTextView.text = nil;
-    
-    //テキストビューを削除
-    [_commentTextView removeFromSuperview];
-    
-    //送信ボタンを削除
-    [sendServeButton removeFromSuperview];
-    
-    //キャンセルボタンを削除
-    [commentCancelButton removeFromSuperview];
-    //Annotation削除用カウンター設定
-    [NSTimer scheduledTimerWithTimeInterval:300
-                                    target:self
-                                    selector:@selector(deleteAnnotation)
-                                    userInfo:nil
-                                    repeats:NO];
+    if ([str length] > maxInputLength) {
+        return NO;
     }
+    
+    return YES;
 }
-//キャンセルボタン処理
+
+#pragma mark キャンセルボタン処理
 -(void)commentCancel{
     
     //テキストビューを削除
@@ -419,11 +430,57 @@
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
     
-    
+    //コメント投稿時の背景Viewを削除
+    [commentbackView removeFromSuperview];
 }
+
+#pragma mark サーバー送信処理
+- (void)sendServer{
+    if ([_commentTextView.text length] == 0) {
+        
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"コメントを入力してください" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
+        
+        [alert show];
+        
+    }else{
+        //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
+        CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
+        //AWSDynamoDBのTableへコメントをUpload
+        [self commentSender:annotation];
+    
+        //Annnotation管理用配列へカスタムAnnotationインスタンスを追加
+        [annotationData addObject:annotation];
+    
+        //AnnotationViewの配列へ管理配列へ追加したオブジェクトを代入
+        [_mapview addAnnotation:annotation];
+    
+        //送信時にコメント文字列を消去
+        _commentTextView.text = nil;
+    
+        //テキストビューを削除
+        [_commentTextView removeFromSuperview];
+    
+        //送信ボタンを削除
+        [sendServeButton removeFromSuperview];
+    
+        //キャンセルボタンを削除
+        [commentCancelButton removeFromSuperview];
+        
+        //コメント投稿時の背景Viewを削除
+        [commentbackView removeFromSuperview];
+
+        //Annotation削除用カウンター設定
+        [NSTimer scheduledTimerWithTimeInterval:300
+                                    target:self
+                                    selector:@selector(deleteAnnotation)
+                                    userInfo:nil
+                                    repeats:NO];
+    }
+}
+
 #pragma mark Informationページへ移動
 - (void)intoInformation{
-    [self performSegueWithIdentifier:@"informationView" sender:self];
+    [self performSegueWithIdentifier:@"informationTableView" sender:self];
 }
 
 #pragma mark -
