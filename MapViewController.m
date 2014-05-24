@@ -8,8 +8,8 @@
 
 #import "MapViewController.h"
 
-#define ACCESS_KEY_ID           @"AKIAIRE6TLCKAYJBDMKA"
-#define SECRET_KEY              @"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"
+#define ACCESS_KEY_ID           @""
+#define SECRET_KEY              @""
 #define TABLE_NAME              @"testTable"
 #define TABLE_HASH_KEY          @"id"
 #define TABLE_RANGE_KEY         @"date"
@@ -20,7 +20,7 @@
 
 @interface MapViewController ()
 {
-    UIButton *sendServeButton;
+    UIButton *sendServerButton;
     UIButton *commentCancelButton;
     UIView *commentbackView;
     UIButton *reloadbtn;
@@ -111,8 +111,7 @@
     Reachability *reachablity = [Reachability reachabilityForInternetConnection];
     NetworkStatus status = [reachablity currentReachabilityStatus];
     if (status == NotReachable) {
-        UIAlertView *networkAlert = [[UIAlertView alloc]initWithTitle:@"インターネット接続出来ません" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
-        [networkAlert show];
+        [self disconnectionAlert];
     }
     
     //保存してあるデバイスのキーボードサイズを取得
@@ -187,6 +186,8 @@
 #pragma mark AnnotationView処理
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
     if ([annotation isKindOfClass:[MKUserLocation class]]) {
+        //ユーザーロケーション位置の吹き出しを非表示
+        ((MKUserLocation *)annotation).title = nil;
         return nil;
     } else {
         MKAnnotationView *annotationView;
@@ -244,6 +245,11 @@
 #pragma mark ツールバーのボタン処理
 #pragma mark AnnotaionReload
 - (void)mapReload{
+    Reachability *reachablity = [Reachability reachabilityForInternetConnection];
+    NetworkStatus status = [reachablity currentReachabilityStatus];
+    if (status == NotReachable) {
+        [self disconnectionAlert];
+    } else {
     // アニメーションの初期化　アニメーションのキーパスを"transform"にする
     CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"transform"];
     
@@ -333,6 +339,7 @@
                                        userInfo:nil
                                         repeats:NO];
     }
+    }
 }
 
 #pragma mark コメント投稿処理
@@ -373,17 +380,17 @@
     //textviemにフォーカスを移している
     [_commentTextView becomeFirstResponder];
     //ボタン生成
-    sendServeButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
+    sendServerButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
-    [sendServeButton setTitle:@"送信" forState:UIControlStateNormal];
+    [sendServerButton setTitle:@"送信" forState:UIControlStateNormal];
     //フォントサイズを決めている
-    sendServeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    sendServerButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     //ボタンの領域と縦横サイズ
-    sendServeButton.frame =CGRectMake(self.view.bounds.size.width - 60, keyboardFrameSize.origin.y - 160, 50, 40);
+    sendServerButton.frame =CGRectMake(self.view.bounds.size.width - 60, keyboardFrameSize.origin.y - 160, 50, 40);
     //タッチアクションとメソッドを設定
-    [sendServeButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
+    [sendServerButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
     //ボタンを表示する
-    [self.view addSubview:sendServeButton];
+    [self.view addSubview:sendServerButton];
     
     commentCancelButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
@@ -425,7 +432,7 @@
     [_commentTextView removeFromSuperview];
     
     //送信ボタンを削除
-    [sendServeButton removeFromSuperview];
+    [sendServerButton removeFromSuperview];
     
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
@@ -436,13 +443,14 @@
 
 #pragma mark サーバー送信処理
 - (void)sendServer{
+    Reachability *reachablity = [Reachability reachabilityForInternetConnection];
+    NetworkStatus status = [reachablity currentReachabilityStatus];
     if ([_commentTextView.text length] == 0) {
-        
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"コメントを入力してください" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
-        
         [alert show];
-        
-    }else{
+    }else if (status == NotReachable) {
+        [self disconnectionAlert];
+    } else {
         //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
         CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
         //AWSDynamoDBのTableへコメントをUpload
@@ -461,14 +469,14 @@
         [_commentTextView removeFromSuperview];
     
         //送信ボタンを削除
-        [sendServeButton removeFromSuperview];
+        [sendServerButton removeFromSuperview];
     
         //キャンセルボタンを削除
         [commentCancelButton removeFromSuperview];
         
         //コメント投稿時の背景Viewを削除
         [commentbackView removeFromSuperview];
-
+        
         //Annotation削除用カウンター設定
         [NSTimer scheduledTimerWithTimeInterval:300
                                     target:self
@@ -488,6 +496,13 @@
 - (void)deleteAnnotation{
     [_mapview removeAnnotation:[annotationData objectAtIndex:0]];
     [annotationData removeObjectAtIndex:0];
+}
+
+#pragma mark -
+#pragma mark Network切断時のAlert表示
+- (void)disconnectionAlert{
+    UIAlertView *networkAlert = [[UIAlertView alloc]initWithTitle:@"インターネット接続出来ません" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
+    [networkAlert show];
 }
 
 @end
