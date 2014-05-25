@@ -10,9 +10,9 @@
 
 #define ACCESS_KEY_ID           @""
 #define SECRET_KEY              @""
-#define TABLE_NAME              @"testTable0"
-#define TABLE_HASH_KEY          @"id"
-#define TABLE_RANGE_KEY         @"date"
+#define TABLE_INFO_NAME         @"testTable0"
+#define TABLE_INFO_HASH_KEY     @"id"
+#define TABLE_INFO_RANGE_KEY    @"date"
 #define TABLE_COLUMN_TITLE      @"title"
 
 @interface InformationTableViewController ()
@@ -81,8 +81,6 @@
     keyboardFrameSize = CGRectFromString([[NSUserDefaults standardUserDefaults] objectForKey:@"keyboardSize"]);
     
     [self infoLoad];
-    
-    NSLog(@"%@",infoElements);
 }
 
 - (void)didReceiveMemoryWarning
@@ -108,7 +106,7 @@
     NSMutableArray *elementsArray = [infoElements objectAtIndex:(infoElements.count - (indexPath.row + 1))];
     DynamoDBAttributeValue *element = [elementsArray valueForKey:TABLE_COLUMN_TITLE];
     cell.textLabel.text = element.s;
-    element = [elementsArray valueForKey:TABLE_RANGE_KEY];
+    element = [elementsArray valueForKey:TABLE_INFO_RANGE_KEY];
     cell.detailTextLabel.text = element.s;
     
     return cell;
@@ -239,13 +237,13 @@
     //更新用配列を作成
     NSMutableDictionary *valueDic =
     (NSMutableDictionary *)[NSDictionary dictionaryWithObjectsAndKeys:
-                            [[DynamoDBAttributeValue alloc] initWithS:_userName], TABLE_HASH_KEY,
-                            [[DynamoDBAttributeValue alloc] initWithS:dateStr], TABLE_RANGE_KEY,
+                            [[DynamoDBAttributeValue alloc] initWithS:_userName], TABLE_INFO_HASH_KEY,
+                            [[DynamoDBAttributeValue alloc] initWithS:dateStr], TABLE_INFO_RANGE_KEY,
                             [[DynamoDBAttributeValue alloc] initWithS:_commentTextView.text], TABLE_COLUMN_TITLE,
                             nil];
     
     //更新用テーブル名と更新用Itemを格納
-    DynamoDBPutItemRequest *puItemRequest = [[DynamoDBPutItemRequest alloc] initWithTableName:TABLE_NAME andItem:valueDic];
+    DynamoDBPutItemRequest *puItemRequest = [[DynamoDBPutItemRequest alloc] initWithTableName:TABLE_INFO_NAME andItem:valueDic];
     
     //更新処理実行
     [dbClient putItem:puItemRequest];
@@ -273,7 +271,7 @@
         DynamoDBScanRequest *scanRequest = [DynamoDBScanRequest new];
         
         //リクエスト用オブジェクトにTable名を設定
-        scanRequest.tableName = TABLE_NAME;
+        scanRequest.tableName = TABLE_INFO_NAME;
         
         //検索条件用オブジェクトを生成
         DynamoDBCondition *condition = [DynamoDBCondition new];

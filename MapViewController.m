@@ -11,9 +11,9 @@
 
 #define ACCESS_KEY_ID           @""
 #define SECRET_KEY              @""
-#define TABLE_NAME              @"testTable"
-#define TABLE_HASH_KEY          @"id"
-#define TABLE_RANGE_KEY         @"date"
+#define TABLE_MAP_NAME          @"testTable"
+#define TABLE_MAP_HASH_KEY      @"id"
+#define TABLE_MAP_RANGE_KEY     @"date"
 #define TABLE_COLUMN_NUM        @"num"
 #define TABLE_COLUMN_LATITUDE   @"latitude"
 #define TABLE_COLUMN_LONGITUDE  @"longitude"
@@ -227,8 +227,8 @@
     //更新用配列を作成
     NSMutableDictionary *valueDic =
     (NSMutableDictionary *)[NSDictionary dictionaryWithObjectsAndKeys:
-                            [[DynamoDBAttributeValue alloc] initWithS:_userName], TABLE_HASH_KEY,
-                            [[DynamoDBAttributeValue alloc] initWithS:dateStr], TABLE_RANGE_KEY,
+                            [[DynamoDBAttributeValue alloc] initWithS:_userName], TABLE_MAP_HASH_KEY,
+                            [[DynamoDBAttributeValue alloc] initWithS:dateStr], TABLE_MAP_RANGE_KEY,
                             [[DynamoDBAttributeValue alloc] initWithS:paswword], TABLE_COLUMN_NUM,
                             [[DynamoDBAttributeValue alloc] initWithS:latitudeStr], TABLE_COLUMN_LATITUDE,
                             [[DynamoDBAttributeValue alloc] initWithS:longitudeStr], TABLE_COLUMN_LONGITUDE,
@@ -236,7 +236,7 @@
                             nil];
     
     //更新用テーブル名と更新用Itemを格納
-    DynamoDBPutItemRequest *puItemRequest = [[DynamoDBPutItemRequest alloc] initWithTableName:TABLE_NAME andItem:valueDic];
+    DynamoDBPutItemRequest *puItemRequest = [[DynamoDBPutItemRequest alloc] initWithTableName:TABLE_MAP_NAME andItem:valueDic];
     
     //更新処理実行
     [dbClient putItem:puItemRequest];
@@ -274,7 +274,7 @@
     DynamoDBScanRequest *scanRequest = [DynamoDBScanRequest new];
     
     //リクエスト用オブジェクトにTable名を設定
-    scanRequest.tableName = TABLE_NAME;
+    scanRequest.tableName = TABLE_MAP_NAME;
     
     //検索条件用オブジェクトを生成
     DynamoDBCondition *condition = [DynamoDBCondition new];
