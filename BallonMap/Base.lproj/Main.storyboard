@@ -92,12 +92,36 @@
                     </tableView>
                     <connections>
                         <segue destination="ok2-ht-EBh" kind="unwind" identifier="fromInformationView" unwindAction="informationViewReturnActionForSegue:" id="97r-Tr-sbv"/>
+                        <segue destination="sD9-NL-Neh" kind="modal" identifier="infoView" id="yoj-Fg-ylE"/>
                     </connections>
                 </tableViewController>
                 <exit id="ok2-ht-EBh" userLabel="Exit" sceneMemberID="exit"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="19G-Lb-gvf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="956" y="10"/>
+        </scene>
+        <!--Info View Controller-->
+        <scene sceneID="pLh-he-hwO">
+            <objects>
+                <viewController id="sD9-NL-Neh" customClass="InfoViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lXl-tP-Kek"/>
+                        <viewControllerLayoutGuide type="bottom" id="8xe-dl-M6a"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="W7g-QW-CBN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Krw-vc-wlI"/>
+                    <connections>
+                        <segue destination="BP3-r7-gmK" kind="unwind" identifier="fromInfoVIew" unwindAction="infoViewReturnActionForSegue:" id="vEP-tq-Btc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WTw-Tf-grS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="BP3-r7-gmK" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1380" y="10"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

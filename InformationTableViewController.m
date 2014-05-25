@@ -7,6 +7,7 @@
 //
 
 #import "InformationTableViewController.h"
+#import "InfoViewController.h"
 
 #define ACCESS_KEY_ID           @""
 #define SECRET_KEY              @""
@@ -53,7 +54,7 @@
     //ツールバー生成
     UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 65)];
     
-    //informationボタン
+    //backviewボタン
     UIBarButtonItem *backViewBtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backview.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(backMapView:)];
     
     //可変スペース
@@ -101,6 +102,12 @@
 
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                    reuseIdentifier:CellIdentifier];
+    
+    //フォントサイズ設定
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:15.f];
+    cell.textLabel.minimumScaleFactor = 9.f/15.f;
+    //文字がセルに収まらない場合フォントサイズを変更
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
     
     //配列の後ろから順にセルへ配置
     NSMutableArray *elementsArray = [infoElements objectAtIndex:(infoElements.count - (indexPath.row + 1))];
@@ -304,5 +311,26 @@
         
         infoElements = [response.items mutableCopy];
         }
+}
+
+#pragma mark -
+#pragma mark セル選択時の画面遷移処理
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"infoView" sender:self];
+}
+
+#pragma mark 画面遷移処理
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([[segue identifier] isEqualToString:@"infoView"]) {
+        //画面遷移後のビューコントローラを取得
+        InfoViewController *infovc = [segue destinationViewController];
+        infovc.detailArray = [infoElements objectAtIndex:(infoElements.count - (self.tableView.indexPathForSelectedRow.row + 1))];
+    }
+}
+
+- (IBAction)infoViewReturnActionForSegue:(UIStoryboardSegue *)segue
+{
+    //    NSLog(@"Information view return action invoked.");
 }
 @end
