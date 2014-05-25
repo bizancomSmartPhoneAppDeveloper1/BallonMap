@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AWSDynamoDB/AWSDynamoDB.h>
+#import <AWSRuntime/AWSRuntime.h>
+#import "Reachability.h"
+#import "NSDate+Escort.h"
 
-@interface InformationTableViewController : UITableViewController
+@interface InformationTableViewController : UITableViewController<UITextViewDelegate>
+
+//userName受け取り用
+@property NSString *userName;
 
 @end

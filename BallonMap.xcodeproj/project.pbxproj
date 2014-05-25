@@ -15,6 +15,7 @@
 		180993A6192B325D003CDA49 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180993A5192B325D003CDA49 /* Icon-Small@2x.png */; };
 		180993A9192C7208003CDA49 /* InformationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 180993A8192C7208003CDA49 /* InformationTableViewController.m */; };
 		180993B9192ECCEB003CDA49 /* ballon_unchosen.png in Resources */ = {isa = PBXBuildFile; fileRef = 180993B8192ECCEB003CDA49 /* ballon_unchosen.png */; };
+		180993BD19308852003CDA49 /* backview.png in Resources */ = {isa = PBXBuildFile; fileRef = 180993BC19308852003CDA49 /* backview.png */; };
 		1893B06C191B3D8400E98725 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06B191B3D8400E98725 /* Foundation.framework */; };
 		1893B06E191B3D8400E98725 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06D191B3D8400E98725 /* CoreGraphics.framework */; };
 		1893B070191B3D8400E98725 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1893B06F191B3D8400E98725 /* UIKit.framework */; };
@@ -63,6 +64,7 @@
 		180993A7192C7208003CDA49 /* InformationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InformationTableViewController.h; path = ../InformationTableViewController.h; sourceTree = "<group>"; };
 		180993A8192C7208003CDA49 /* InformationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InformationTableViewController.m; path = ../InformationTableViewController.m; sourceTree = "<group>"; };
 		180993B8192ECCEB003CDA49 /* ballon_unchosen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ballon_unchosen.png; sourceTree = "<group>"; };
+		180993BC19308852003CDA49 /* backview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backview.png; sourceTree = "<group>"; };
 		1893B068191B3D8400E98725 /* BallonMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BallonMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1893B06B191B3D8400E98725 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1893B06D191B3D8400E98725 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -220,6 +222,7 @@
 		1893B0B0191CB07000E98725 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				180993BC19308852003CDA49 /* backview.png */,
 				180993B8192ECCEB003CDA49 /* ballon_unchosen.png */,
 				180993A5192B325D003CDA49 /* Icon-Small@2x.png */,
 				1809939F192B3200003CDA49 /* Icon-40@2x.png */,
@@ -317,6 +320,7 @@
 				1893B084191B3D8400E98725 /* Images.xcassets in Resources */,
 				1893B076191B3D8400E98725 /* InfoPlist.strings in Resources */,
 				1893B0CF1920A56700E98725 /* information.png in Resources */,
+				180993BD19308852003CDA49 /* backview.png in Resources */,
 				180993A3192B3200003CDA49 /* Icon-60@2x.png in Resources */,
 				1893B11819236D0500E98725 /* check_off.jpg in Resources */,
 				1893B07F191B3D8400E98725 /* Main.storyboard in Resources */,

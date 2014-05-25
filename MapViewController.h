@@ -16,7 +16,7 @@
 #import "NSDate+Escort.h"
 #import "Reachability.h"
 
-@interface MapViewController : UIViewController<UITextFieldDelegate,CLLocationManagerDelegate,MKMapViewDelegate,UITextViewDelegate>
+@interface MapViewController : UIViewController<CLLocationManagerDelegate,MKMapViewDelegate,UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapview;
 

@@ -271,6 +271,8 @@ shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)strin
     }
 }
 
+#pragma mark -
+#pragma mark キーボードサイズ取得
 - (void)keyboardWillShow:(NSNotification*)note
 {
     // キーボードの表示完了時の場所と大きさを取得します。

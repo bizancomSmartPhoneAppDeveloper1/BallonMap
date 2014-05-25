@@ -7,6 +7,7 @@
 //
 
 #import "MapViewController.h"
+#import "InformationTableViewController.h"
 
 #define ACCESS_KEY_ID           @""
 #define SECRET_KEY              @""
@@ -453,6 +454,7 @@
     } else {
         //コメントとUserLocation情報を渡しCustomAnnotationインスタンス作成
         CustomAnnotation *annotation = [[CustomAnnotation alloc]initWithLocationCoordinate:_mapview.userLocation.location.coordinate title:_commentTextView.text];
+        
         //AWSDynamoDBのTableへコメントをUpload
         [self commentSender:annotation];
     
@@ -503,6 +505,23 @@
 - (void)disconnectionAlert{
     UIAlertView *networkAlert = [[UIAlertView alloc]initWithTitle:@"インターネット接続出来ません" message:nil delegate:self cancelButtonTitle:@"確認" otherButtonTitles:nil];
     [networkAlert show];
+}
+
+#pragma mark -
+#pragma mark 画面遷移処理
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if([[segue identifier] isEqualToString:@"informationTableView"]) {
+        //画面遷移後のビューコントローラを取得
+        InformationTableViewController *infoViewController = [segue destinationViewController];
+        
+        //loginNameをtextField文字列から取得し次のViewプロパティへ受け渡し
+        infoViewController.userName = _userName;
+    }
+}
+
+- (IBAction)informationViewReturnActionForSegue:(UIStoryboardSegue *)segue
+{
+//    NSLog(@"Information view return action invoked.");
 }
 
 @end
