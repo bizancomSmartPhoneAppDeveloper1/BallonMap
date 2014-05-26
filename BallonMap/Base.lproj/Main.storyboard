@@ -64,13 +64,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="uaK-B1-3k4">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="zBf-2V-fsI">
-                                <rect key="frame" x="0.0" y="87" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="52" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zBf-2V-fsI" id="Ldw-uy-izN">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -91,6 +91,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="coordinateView" destination="uaK-B1-3k4" id="7Nv-4x-vDn"/>
                         <segue destination="ok2-ht-EBh" kind="unwind" identifier="fromInformationView" unwindAction="informationViewReturnActionForSegue:" id="97r-Tr-sbv"/>
                         <segue destination="sD9-NL-Neh" kind="modal" identifier="infoView" id="yoj-Fg-ylE"/>
                     </connections>

@@ -23,7 +23,8 @@
 {
     UIButton *sendServerButton;
     UIButton *commentCancelButton;
-    UIView *commentbackView;
+    UIToolbar *comentToolBar;
+    UIToolbar *comentStsBar;
     UIButton *reloadbtn;
     CGRect keyboardFrameSize;
     //Annotation管理用配列
@@ -345,12 +346,6 @@
 
 #pragma mark コメント投稿処理
 - (void)contribute{
-    //TextViewの背景Viewを差し込み
-    commentbackView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height)];
-    commentbackView.backgroundColor = [UIColor whiteColor];
-    
-    [self.view addSubview:commentbackView];
-    
     // UITextViewのインスタンス化
     CGRect rect1 = CGRectMake(0, 65, self.view.bounds.size.width, (self.view.bounds.size.height - keyboardFrameSize.size.height) - 65);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
@@ -390,8 +385,7 @@
     sendServerButton.frame =CGRectMake(self.view.bounds.size.width - 60, keyboardFrameSize.origin.y - 160, 50, 40);
     //タッチアクションとメソッドを設定
     [sendServerButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
-    //ボタンを表示する
-    [self.view addSubview:sendServerButton];
+    
     
     commentCancelButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
@@ -403,8 +397,42 @@
     //タッチアクションとメソッドを設定
     [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
     
-    //ボタンを表示する
-    [self.view addSubview:commentCancelButton];
+    // 全画面のサイズを取得する
+    CGRect fullScreen = [[UIScreen mainScreen] bounds];
+    
+    //ステータスバー領域を除いた領域を取得する
+    CGRect stsExceptScreen = [[UIScreen mainScreen] applicationFrame];
+    
+    float stsbarf = fullScreen.size.height - stsExceptScreen.size.height;
+    
+    //ツールバー生成
+    comentToolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, stsExceptScreen.origin.y, self.view.bounds.size.width, 45)];
+    
+    UIBarButtonItem *commentCancelBtn =
+    [[UIBarButtonItem alloc] initWithCustomView:commentCancelButton];
+    
+    //ボタンを元にボタンアイテムを作成
+    UIBarButtonItem *sendServerBtn =
+    [[UIBarButtonItem alloc] initWithCustomView:sendServerButton];
+    
+    //可変スペース
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    //ツールバーへボタンアイテムを設置
+    comentToolBar.items = [NSArray arrayWithObjects:commentCancelBtn,space,sendServerBtn, nil];
+    
+    comentToolBar.translucent = NO;
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:comentToolBar];
+    
+    //ツールバー生成
+    comentStsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, stsbarf)];
+    
+    comentStsBar.translucent = NO;
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:comentStsBar];
 }
 
 #pragma mark コメント投稿時の文字数制限
@@ -438,8 +466,9 @@
     //キャンセルボタンを削除
     [commentCancelButton removeFromSuperview];
     
-    //コメント投稿時の背景Viewを削除
-    [commentbackView removeFromSuperview];
+    //コメント投稿時の背景用toolbarを削除
+    [comentToolBar removeFromSuperview];
+    [comentStsBar removeFromSuperview];
 }
 
 #pragma mark サーバー送信処理
@@ -476,8 +505,9 @@
         //キャンセルボタンを削除
         [commentCancelButton removeFromSuperview];
         
-        //コメント投稿時の背景Viewを削除
-        [commentbackView removeFromSuperview];
+        //コメント投稿時の背景用toolbarを削除
+        [comentToolBar removeFromSuperview];
+        [comentStsBar removeFromSuperview];
         
         //Annotation削除用カウンター設定
         [NSTimer scheduledTimerWithTimeInterval:300

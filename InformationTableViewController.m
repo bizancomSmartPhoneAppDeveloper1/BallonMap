@@ -31,6 +31,7 @@
 }
 
 @property (nonatomic, retain) UITextView *commentTextView;
+@property (weak, nonatomic) IBOutlet UIView *coordinateView;
 
 @end
 
@@ -51,8 +52,16 @@
     
     infoElements = [NSMutableArray array];
     
+    // 全画面のサイズを取得する
+    CGRect fullScreen = [[UIScreen mainScreen] bounds];
+    
+    //ステータスバー領域を除いた領域を取得する
+    CGRect stsExceptScreen = [[UIScreen mainScreen] applicationFrame];
+    
+    float stsbarf = fullScreen.size.height - stsExceptScreen.size.height;
+    
     //ツールバー生成
-    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 65)];
+    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, stsExceptScreen.origin.y, self.view.bounds.size.width, 45)];
     
     //backviewボタン
     UIBarButtonItem *backViewBtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backview.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(backMapView:)];
@@ -69,12 +78,20 @@
     //ビューへツールバーを配置
     [self.view addSubview:toolBar];
     
+    //ツールバー生成
+    UIToolbar *stsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, stsbarf)];
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:stsBar];
+    
+    _coordinateView.frame = CGRectMake(0, 0, self.view.bounds.size.width, stsbarf + 45);
+    
     //awsアクセスキー情報格納
     aCredentials = [[AmazonCredentials alloc]
                     initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
     //ユーザー情報を元にDynamoDB用クライアント作成
     dbClient = [[AmazonDynamoDBClient alloc]initWithCredentials:aCredentials];
-    
+
     //DynamoDB用クライアントへエンドポイント(東京サーバー)設定
     dbClient.endpoint = [AmazonEndpoints ddbEndpoint:AP_NORTHEAST_1];
     
@@ -103,12 +120,6 @@
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                    reuseIdentifier:CellIdentifier];
     
-    //フォントサイズ設定
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:15.f];
-    cell.textLabel.minimumScaleFactor = 9.f/15.f;
-    //文字がセルに収まらない場合フォントサイズを変更
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
-    
     //配列の後ろから順にセルへ配置
     NSMutableArray *elementsArray = [infoElements objectAtIndex:(infoElements.count - (indexPath.row + 1))];
     DynamoDBAttributeValue *element = [elementsArray valueForKey:TABLE_COLUMN_TITLE];
@@ -122,12 +133,6 @@
 #pragma mark -
 #pragma mark タイムラインコメント投稿処理
 - (void)contribute{
-    //TextViewの背景Viewを差し込み
-    commentbackView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width,self.view.bounds.size.height)];
-    commentbackView.backgroundColor = [UIColor whiteColor];
-    
-    [self.view addSubview:commentbackView];
-    
     // UITextViewのインスタンス化
     CGRect rect1 = CGRectMake(0, 65, self.view.bounds.size.width, (self.view.bounds.size.height - keyboardFrameSize.size.height) - 65);
     _commentTextView = [[UITextView alloc]initWithFrame:rect1];
@@ -167,8 +172,7 @@
     sendServerButton.frame =CGRectMake(self.view.bounds.size.width - 60, keyboardFrameSize.origin.y - 160, 50, 40);
     //タッチアクションとメソッドを設定
     [sendServerButton addTarget:self action:@selector(sendServer) forControlEvents:UIControlEventTouchUpInside];
-    //ボタンを表示する
-    [self.view addSubview:sendServerButton];
+    
     
     commentCancelButton =[UIButton buttonWithType:UIButtonTypeRoundedRect];
     //タイトル文字を決めている
@@ -180,8 +184,42 @@
     //タッチアクションとメソッドを設定
     [commentCancelButton addTarget:self action:@selector(commentCancel) forControlEvents:UIControlEventTouchUpInside];
     
-    //ボタンを表示する
-    [self.view addSubview:commentCancelButton];
+    // 全画面のサイズを取得する
+    CGRect fullScreen = [[UIScreen mainScreen] bounds];
+    
+    //ステータスバー領域を除いた領域を取得する
+    CGRect stsExceptScreen = [[UIScreen mainScreen] applicationFrame];
+    
+    float stsbarf = fullScreen.size.height - stsExceptScreen.size.height;
+    
+    //ツールバー生成
+    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, stsExceptScreen.origin.y, self.view.bounds.size.width, 45)];
+    
+    UIBarButtonItem *commentCancelBtn =
+    [[UIBarButtonItem alloc] initWithCustomView:commentCancelButton];
+    
+    //ボタンを元にボタンアイテムを作成
+    UIBarButtonItem *sendServerBtn =
+    [[UIBarButtonItem alloc] initWithCustomView:sendServerButton];
+    
+    //可変スペース
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    //ツールバーへボタンアイテムを設置
+    toolBar.items = [NSArray arrayWithObjects:commentCancelBtn,space,sendServerBtn, nil];
+    
+    toolBar.translucent = NO;
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:toolBar];
+    
+    //ツールバー生成
+    UIToolbar *stsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, stsbarf)];
+    
+    stsBar.translucent = NO;
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:stsBar];
 }
 
 #pragma mark キャンセルボタン処理
@@ -254,6 +292,11 @@
     
     //更新処理実行
     [dbClient putItem:puItemRequest];
+    
+    //テーブルデータを更新
+    [self infoLoad];
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark -
