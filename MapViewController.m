@@ -11,7 +11,7 @@
 
 #define ACCESS_KEY_ID           @""
 #define SECRET_KEY              @""
-#define TABLE_MAP_NAME          @"testTable"
+#define TABLE_MAP_NAME          @"usermaster"
 #define TABLE_MAP_HASH_KEY      @"id"
 #define TABLE_MAP_RANGE_KEY     @"date"
 #define TABLE_COLUMN_NUM        @"num"
@@ -118,6 +118,9 @@
     
     //保存してあるデバイスのキーボードサイズを取得
     keyboardFrameSize = CGRectFromString([[NSUserDefaults standardUserDefaults] objectForKey:@"keyboardSize"]);
+    
+    //マップ
+    [self mapReload];
 }
 
 - (void)didReceiveMemoryWarning
@@ -288,7 +291,7 @@
     dateFormatter.dateFormat  = @"yyyy/MM/dd HH:mm:ss";
     
     //5分前の時間を取得し文字列で格納
-    NSDate *beforeMinutes = [NSDate dateWithMinutesBeforeNow:5];
+    NSDate *beforeMinutes = [NSDate dateWithDaysBeforeNow:1];
     NSTimeZone *tz = [NSTimeZone systemTimeZone];
     NSInteger seconds = [tz secondsFromGMTForDate:beforeMinutes];
     NSDate *localDate = [beforeMinutes dateByAddingTimeInterval:seconds];

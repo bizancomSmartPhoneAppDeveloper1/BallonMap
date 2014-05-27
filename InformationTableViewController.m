@@ -11,7 +11,7 @@
 
 #define ACCESS_KEY_ID           @""
 #define SECRET_KEY              @""
-#define TABLE_INFO_NAME         @"testTable0"
+#define TABLE_INFO_NAME         @"informationmaster"
 #define TABLE_INFO_HASH_KEY     @"id"
 #define TABLE_INFO_RANGE_KEY    @"date"
 #define TABLE_COLUMN_TITLE      @"title"
