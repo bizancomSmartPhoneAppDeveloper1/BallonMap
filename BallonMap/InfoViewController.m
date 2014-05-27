@@ -65,24 +65,7 @@
     [self.view addSubview:stsBar];
     
     DynamoDBAttributeValue *element = [_detailArray valueForKey:TABLE_COLUMN_TITLE];
-    
-    UILabel *infoTitleLabel = [UILabel new];
-    
-    infoTitleLabel.font = [UIFont fontWithName:@"Helvetica" size:20];
-    
-    infoTitleLabel.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10000);
-    
-    infoTitleLabel.frame = CGRectMake(0, stsExceptScreen.origin.y + 45, self.view.bounds.size.width, [self adjustHeight:element.s label:infoTitleLabel]);
-    
-    infoTitleLabel.numberOfLines = 0;
-    
-    infoTitleLabel.backgroundColor = [UIColor colorWithRed:0/255.0f green:142/255.0f blue:255/255.0f alpha:1.0f];
-    
-    infoTitleLabel.textColor = [UIColor whiteColor];
-    
-    [self.view addSubview:infoTitleLabel];
-    
-    infoTitleLabel.text = element.s;
+    detailTexitView.text = element.s;
 }
 
 - (void)didReceiveMemoryWarning
@@ -94,22 +77,5 @@
 #pragma mark exit
 - (void)backMapView:(id)sender{
     [self performSegueWithIdentifier:@"fromInfoVIew" sender:self];
-}
-
-- (float)adjustHeight:(NSString *)show_word label:(UILabel *)label{
-    CGFloat fontSize = label.font.pointSize;
-    float  labelWidth  = label.bounds.size.width;
-    float  labelHeight = label.bounds.size.height;
-    
-    UIFont *font = [UIFont systemFontOfSize:fontSize];
-    CGSize size = CGSizeMake(labelWidth, labelHeight);
-    
-    CGRect totalRect = [show_word boundingRectWithSize:size
-                                               options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                            attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName]
-                                               context:nil];
-    float fitSizeHeight = totalRect.size.height;
-    
-    return fitSizeHeight;
 }
 @end

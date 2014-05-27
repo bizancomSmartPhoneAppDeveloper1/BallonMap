@@ -52,39 +52,7 @@
     
     infoElements = [NSMutableArray array];
     
-    // 全画面のサイズを取得する
-    CGRect fullScreen = [[UIScreen mainScreen] bounds];
-    
-    //ステータスバー領域を除いた領域を取得する
-    CGRect stsExceptScreen = [[UIScreen mainScreen] applicationFrame];
-    
-    float stsbarf = fullScreen.size.height - stsExceptScreen.size.height;
-    
-    //ツールバー生成
-    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, stsExceptScreen.origin.y, self.view.bounds.size.width, 45)];
-    
-    //backviewボタン
-    UIBarButtonItem *backViewBtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backview.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(backMapView:)];
-    
-    //可変スペース
-    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    //投稿ボタンを作成
-    UIBarButtonItem *contributebtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"contribute.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(contribute)];
-    
-    //ツールバーへボタンアイテムを設置
-    toolBar.items = [NSArray arrayWithObjects:backViewBtn,space,contributebtn, nil];
-    
-    //ビューへツールバーを配置
-    [self.view addSubview:toolBar];
-    
-    //ツールバー生成
-    UIToolbar *stsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, stsbarf)];
-    
-    //ビューへツールバーを配置
-    [self.view addSubview:stsBar];
-    
-    _coordinateView.frame = CGRectMake(0, 0, self.view.bounds.size.width, stsbarf + 45);
+    [self viewCreate];
     
     //awsアクセスキー情報格納
     aCredentials = [[AmazonCredentials alloc]
@@ -236,6 +204,9 @@
     
     //コメント投稿時の背景Viewを削除
     [commentbackView removeFromSuperview];
+    
+    //初期ビューを再生成
+    [self viewCreate];
 }
 
 #pragma mark サーバー送信処理
@@ -265,6 +236,9 @@
         
         //コメント投稿時の背景Viewを削除
         [commentbackView removeFromSuperview];
+        
+        //初期ビューを再生成
+        [self viewCreate];
     }
 }
 
@@ -370,6 +344,44 @@
         InfoViewController *infovc = [segue destinationViewController];
         infovc.detailArray = [infoElements objectAtIndex:(infoElements.count - (self.tableView.indexPathForSelectedRow.row + 1))];
     }
+}
+
+#pragma mark -
+#pragma mark 初期ビュー生成
+- (void)viewCreate{
+    // 全画面のサイズを取得する
+    CGRect fullScreen = [[UIScreen mainScreen] bounds];
+    
+    //ステータスバー領域を除いた領域を取得する
+    CGRect stsExceptScreen = [[UIScreen mainScreen] applicationFrame];
+    
+    float stsbarf = fullScreen.size.height - stsExceptScreen.size.height;
+    
+    //ツールバー生成
+    UIToolbar *toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, stsExceptScreen.origin.y, self.view.bounds.size.width, 45)];
+    
+    //backviewボタン
+    UIBarButtonItem *backViewBtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"backview.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(backMapView:)];
+    
+    //可変スペース
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    //投稿ボタンを作成
+    UIBarButtonItem *contributebtn = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"contribute.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]                                                                  style:UIBarButtonItemStylePlain target:self action:@selector(contribute)];
+    
+    //ツールバーへボタンアイテムを設置
+    toolBar.items = [NSArray arrayWithObjects:backViewBtn,space,contributebtn, nil];
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:toolBar];
+    
+    //ツールバー生成
+    UIToolbar *stsBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, stsbarf)];
+    
+    //ビューへツールバーを配置
+    [self.view addSubview:stsBar];
+    
+    _coordinateView.frame = CGRectMake(0, 0, self.view.bounds.size.width, stsbarf + 45);
 }
 
 - (IBAction)infoViewReturnActionForSegue:(UIStoryboardSegue *)segue
