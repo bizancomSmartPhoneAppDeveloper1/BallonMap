@@ -291,7 +291,7 @@
     dateFormatter.dateFormat  = @"yyyy/MM/dd HH:mm:ss";
     
     //5分前の時間を取得し文字列で格納
-    NSDate *beforeMinutes = [NSDate dateWithDaysBeforeNow:1];
+    NSDate *beforeMinutes = [NSDate dateWithMinutesBeforeNow:5];
     NSTimeZone *tz = [NSTimeZone systemTimeZone];
     NSInteger seconds = [tz secondsFromGMTForDate:beforeMinutes];
     NSDate *localDate = [beforeMinutes dateByAddingTimeInterval:seconds];
